@@ -1,0 +1,35 @@
+openapi: "3.0.2"
+info:
+  title: Proyek Aplikasi Ecommerce - Grup 1
+  description: Dokumentasi API Ecommerce App - Grup 1
+  contact:
+    name: BE - Grup 1
+    email: yusufnurwahid.contact@gmail.com
+  version: "1.0"
+servers:
+  - url: https://api.server.dev/{version}
+    variables:
+      version:
+        default: v1
+        enum:
+          - v1
+          - v2
+tags:
+  - name: Users
+    description: List of Users
+paths:
+  /users:
+    get:
+      summary: Dapatkan semua detail user
+      tags:
+        - Users
+      description: Cek selengkapnya di HTML bro
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
