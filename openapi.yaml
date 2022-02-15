@@ -392,6 +392,103 @@ paths:
                         stock: 3
                         image:
                           - https://www.adidas.co.id/media/catalog/product/g/x/gx5236_sl_ecom.jpg
+  /products/{id}:  
+    put:
+      summary: Update data produk
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: ID produk hasil generate dari sistem
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: Mengubah data produk dengan input yang sesuai
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                price:
+                  type: integer
+                stock:
+                  type: integer
+              example:
+                price: 1200000
+                stock: 13
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      gender:
+                        type: boolean
+                      size:
+                        type: integer
+                      price:
+                        type: integer
+                      stock:
+                        type: integer
+                      image:
+                        type: array
+                        items:
+                          type: string
+                example:
+                  code: 200
+                  success: true
+                  message: Berhasil menambahkan produk baru
+                  data:
+                    id: 1
+                    name: Adidas Air Max
+                    gender: 1
+                    size: 43
+                    price: 1200000
+                    stock: 13
+                    image:
+                      - https://www.nike.com/id/t/air-max-97-shoe-Ks2tvF/DJ2740-100
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          description: Kesalahan autorisasi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+              example:
+                  code: 401
+                  success: false
+                  message: User tidak terautorisasi
+                  data: {}
 components:
   parameters:
     UserID:
