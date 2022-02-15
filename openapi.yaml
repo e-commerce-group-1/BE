@@ -169,4 +169,118 @@ paths:
                         example: 1
         '400':
           # $ref: '#/components/responses/'400'
-          description: Ada field yang kosong          
+          description: Ada field yang kosong
+  /users/{id}:
+    put:
+      summary: Ubah record berdasarkan ID
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: ID User hasil generate dari sistem
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/UserInput'
+            example:
+              name: Franz Ichsan
+              user_name: franz1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/SuccessSingleResponse'
+              example:
+                code: 200
+                success: true
+                message: Berhasil ubah data user
+                data:
+                  name: Franz Ichsan
+                  user_name: franz1
+        '400':
+          # $ref: '#/components/responses/400'
+          description: Gagal update data user
+    delete:
+      tags:
+        - Users
+      parameters:
+        # $ref: '#/components/parameter/UserID'
+        - name: id
+          in: path
+          description: ID User hasil generate dari sistem
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/SuccessSingleResponse'
+              example:
+                code: 200
+                success: true
+                message: Berhasil hapus data
+                data: null
+components:
+  parameters:
+    UserID:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    UserInput:
+      type: object
+      properties:
+        name:
+          type: string
+        user_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    SuccessSingleResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/UserInput'
+  responses:
+    '400':
+      description: Kesalahan dari client
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Terjadi kesalahan pada input
+              data:
+                type: object
