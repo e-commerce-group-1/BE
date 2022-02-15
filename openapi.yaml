@@ -489,6 +489,25 @@ paths:
                   success: false
                   message: User tidak terautorisasi
                   data: {}
+    delete:
+      tags:
+        - Products
+      summary: Hapus sebuah product
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/SuccessSingleResponse'
+              example:
+                code: 200
+                success: true
+                message: Berhasil hapus data produk
+                data: {}
 components:
   parameters:
     UserID:
