@@ -1,5 +1,6 @@
 configs/config.yaml
 *.jpg
+*.png
 *.json
 go.mod
 go.sum
