@@ -490,9 +490,16 @@ paths:
                   message: User tidak terautorisasi
                   data: {}
     delete:
+      summary: Hapus sebuah product
       tags:
         - Products
-      summary: Hapus sebuah product
+      parameters:
+        - name: id
+          in: path
+          description: ID produk hasil generate sistem
+          required: true
+          schema:
+            type: integer
       security:
         - bearerAuth: []
       responses:
