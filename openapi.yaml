@@ -21,6 +21,20 @@ tags:
     description: Daftar users
   - name: Products
     description: Daftar products
+  - name: Transactions
+    description: Daftar transactions
+  - name: Transactions Details
+    description: Daftar transaction details
+  - name: Addresses
+    description: Daftar alamat
+  - name: Orders
+    description: Daftar orders
+  - name: Payment Methods
+    description: Daftar payment methods
+  - name: Product Categories
+    description: Daftar product categories
+  - name: Product Descriptions 
+    description: Daftar product descriptions
 paths:
   /auth/login:
     post:
