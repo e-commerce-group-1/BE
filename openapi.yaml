@@ -168,8 +168,8 @@ paths:
                         type: boolean
                         example: 1
         '400':
-          # $ref: '#/components/responses/'400'
-          description: Ada field yang kosong
+          $ref: '#/components/responses/400'
+          # description: Ada field yang kosong
   /users/{id}:
     put:
       summary: Ubah record berdasarkan ID
@@ -208,19 +208,19 @@ paths:
                   name: Franz Ichsan
                   user_name: franz1
         '400':
-          # $ref: '#/components/responses/400'
-          description: Gagal update data user
+          $ref: '#/components/responses/400'
+          # description: Gagal update data user
     delete:
       tags:
         - Users
       parameters:
-        # $ref: '#/components/parameter/UserID'
-        - name: id
-          in: path
-          description: ID User hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/UserID'
+        # - name: id
+        #   in: path
+        #   description: ID User hasil generate dari sistem
+        #   required: true
+        #   schema:
+        #     type: integer
       responses:
         '200':
           description: OK
@@ -233,7 +233,7 @@ paths:
                 code: 200
                 success: true
                 message: Berhasil hapus data
-                data: null
+                data: {}
 components:
   parameters:
     UserID:
