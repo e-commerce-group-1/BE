@@ -207,12 +207,13 @@ paths:
                 data:
                   name: Franz Ichsan
                   user_name: franz1
-        '400':
-          $ref: '#/components/responses/400'
+        '204':
+          $ref: '#/components/responses/204'
           # description: Gagal update data user
     delete:
       tags:
         - Users
+      summary: Hapus data user
       parameters:
         - $ref: '#/components/parameters/UserID'
         # - name: id
@@ -234,6 +235,26 @@ paths:
                 success: true
                 message: Berhasil hapus data
                 data: {}
+  /auth/login:
+    post:
+      tags:
+        - Users
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/UserLogin'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/401'
+
 components:
   parameters:
     UserID:
@@ -243,6 +264,13 @@ components:
       schema:
         type: integer
   schemas:
+    UserLogin:
+      type: object
+      properties:
+        user_name:
+          type: string
+        password:
+          type: string
     UserInput:
       type: object
       properties:
@@ -284,3 +312,30 @@ components:
                 example: Terjadi kesalahan pada input
               data:
                 type: object
+    '204':
+      description: Kesalahan update
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 204
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Tidak ada data yang diupdate
+              data:
+                type: object
+                example: {}
+    '401':
+      description: Kesalahan autorisasi
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
