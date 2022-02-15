@@ -222,13 +222,10 @@ paths:
                   user_name: franz1
         '204':
           $ref: '#/components/responses/204'
-          # description: Gagal update data user
     delete:
       tags:
         - Users
       summary: Hapus data user
-      parameters:
-        - $ref: '#/components/parameters/UserID'
       security:
         - bearerAuth: []
       responses:
