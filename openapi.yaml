@@ -15,9 +15,40 @@ servers:
           - v1
           - v2
 tags:
+  - name: Auth
+    description: Autorisasi users
   - name: Users
     description: Daftar users
 paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: User terautorisasi
+          content:
+            application/json:
+              schema:
+                type: object
+                # $ref: '#/components/schemas/SuccessSingleResponse'
+              example:
+                code: 200
+                success: true
+                message: Berhasil mengautorisasi user
+                data:
+                  user_name: franz1
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        '401':
+          $ref: '#/components/responses/401'
   /users:
     post:
       summary: Tambahkan user baru
@@ -147,7 +178,7 @@ paths:
                         type: string
                         format: date-time
                     example:
-                      - id: 1
+                        id: 1
                         address_id: 1
                         name: Frans Ihsan
                         user_name: frans1
@@ -162,13 +193,6 @@ paths:
       summary: Ubah record berdasarkan ID
       tags:
         - Users
-      parameters:
-        - name: id
-          in: path
-          description: ID User hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
       requestBody:
         required: true
         content:
@@ -220,26 +244,6 @@ paths:
                 success: true
                 message: Berhasil hapus data
                 data: {}
-  /auth/login:
-    post:
-      tags:
-        - Users
-      summary: Login user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: '#/components/schemas/UserLogin'
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-        '401':
-          $ref: '#/components/responses/401'
-
 components:
   parameters:
     UserID:
@@ -318,7 +322,25 @@ components:
                 example: {}
     '401':
       description: Kesalahan autorisasi
-
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Email atau password tidak valid
+              data:
+                type: object
+                example:
+                  user_name: franz1
+                  token: {}
   securitySchemes:
     bearerAuth:
       type: http
