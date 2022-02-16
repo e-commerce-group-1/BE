@@ -158,3 +158,34 @@ func TestUpdate(t *testing.T) {
 		assert.NotNil(t, err)
 	})
 }
+
+func TestDelete(t *testing.T) {
+	config := configs.GetConfig()
+	db := utils.InitDB(config)
+
+	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
+		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
+		transaction_detail.TransactionDetails{},
+	)
+	db.AutoMigrate(&user.Users{})
+
+	repo := New(db)
+
+	t.Run("fail to delete user", func(t *testing.T) {
+		err := repo.Delete(1)
+		assert.NotNil(t, err)
+	})
+
+	t.Run("succeed to delete user", func(t *testing.T) {
+		mockUser := user.Users{
+			Name:     "Ucup",
+			UserName: "ucup",
+			Email:    "ucup@ucup.com",
+			Password: "ucup123",
+		}
+		repo.Insert(mockUser)
+
+		err := repo.Delete(1)
+		assert.Nil(t, err)
+	})
+}
