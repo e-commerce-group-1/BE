@@ -1,16 +1,16 @@
 package order
 
 import (
-	"gorm.io/gorm"
 	"group-project1/enitities/transaction"
 	"time"
 
+	"gorm.io/gorm"
 )
 
-type Order struct {
+type Orders struct {
 	gorm.Model
-	Transaction transaction.Transaction `gorm:"foreignKey:Order_ID"`
-	Phone string `gorm:"type:varchar(13)"`
-	Payment_Method_ID uint 
-	Status    time.Time `gorm:"type:timestamp"`
+	Transaction       transaction.Transactions `gorm:"foreignKey:Order_ID"`
+	Phone             string                   `gorm:"type:varchar(13)"`
+	Status            time.Time                `gorm:"type:timestamp"`
+	Payment_Method_ID uint
 }

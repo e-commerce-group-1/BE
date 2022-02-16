@@ -1,13 +1,13 @@
 package product_category
 
 import (
-	"gorm.io/gorm"
 	"group-project1/enitities/product"
 
+	"gorm.io/gorm"
 )
 
-type Product_Category struct {
+type Product_Categories struct {
 	gorm.Model
-	Name string `gorm:"type:varchar(255)"`
-	Product []product.Product `gorm:"foreignKey:Product_Category_ID"`
+	Name    string             `gorm:"type:varchar(255)"`
+	Product []product.Products `gorm:"foreignKey:Product_Category_ID"`
 }
