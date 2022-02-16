@@ -2,14 +2,14 @@ package utils
 
 import (
 	"group-project1/configs"
-	"group-project1/enitities/address"
-	"group-project1/enitities/order"
-	pay "group-project1/enitities/payment_method"
-	"group-project1/enitities/product"
-	p_ctg "group-project1/enitities/product_category"
-	"group-project1/enitities/transaction"
-	tr_detail "group-project1/enitities/transaction_detail"
-	"group-project1/enitities/user"
+	"group-project1/entities/address"
+	"group-project1/entities/order"
+	pay "group-project1/entities/payment_method"
+	"group-project1/entities/product"
+	p_ctg "group-project1/entities/product_category"
+	"group-project1/entities/transaction"
+	tr_detail "group-project1/entities/transaction_detail"
+	"group-project1/entities/user"
 
 	"fmt"
 
