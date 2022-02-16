@@ -2,16 +2,14 @@ package utils
 
 import (
 	"group-project1/configs"
-	"group-project1/enitities/user"
 	"group-project1/enitities/address"
-	"group-project1/enitities/transaction"
 	"group-project1/enitities/order"
 	pay "group-project1/enitities/payment_method"
 	"group-project1/enitities/product"
-	p_desc "group-project1/enitities/product_description"
 	p_ctg "group-project1/enitities/product_category"
+	"group-project1/enitities/transaction"
 	tr_detail "group-project1/enitities/transaction_detail"
-
+	"group-project1/enitities/user"
 
 	"fmt"
 
@@ -29,7 +27,7 @@ func InitDB(config *configs.AppConfig) *gorm.DB {
 		config.Database.Port,
 		config.Database.Name,
 	)
-	
+
 	db, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{})
 
 	if err != nil {
@@ -42,13 +40,12 @@ func InitDB(config *configs.AppConfig) *gorm.DB {
 }
 
 func InitMigrate(db *gorm.DB) {
-	db.AutoMigrate(user.User{})
-	db.AutoMigrate(address.Address{})
-	db.AutoMigrate(transaction.Transaction{})
-	db.AutoMigrate(order.Order{})
-	db.AutoMigrate(pay.Payment_Method{})
-	db.AutoMigrate(product.Product{})
-	db.AutoMigrate(p_desc.Product_Description{})
-	db.AutoMigrate(p_ctg.Product_Category{})
-	db.AutoMigrate(tr_detail.Transaction_Detail{})
+	db.AutoMigrate(user.Users{})
+	db.AutoMigrate(address.Addresses{})
+	db.AutoMigrate(transaction.Transactions{})
+	db.AutoMigrate(order.Orders{})
+	db.AutoMigrate(pay.Payment_Methods{})
+	db.AutoMigrate(product.Products{})
+	db.AutoMigrate(p_ctg.Product_Categories{})
+	db.AutoMigrate(tr_detail.Transaction_Details{})
 }

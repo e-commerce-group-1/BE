@@ -16,7 +16,7 @@ func New(db *gorm.DB) *AddressRepository {
 }
 
 // ======================== Insert Address ==================================
-func (ur *AddressRepository) Insert(newAddress a.Address) (a.Address, error) {
+func (ur *AddressRepository) Insert(newAddress a.Addresses) (a.Addresses, error) {
 	if err := ur.db.Save(&newAddress).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return newAddress, err
@@ -26,8 +26,8 @@ func (ur *AddressRepository) Insert(newAddress a.Address) (a.Address, error) {
 }
 
 // ======================== Get Addresses ==================================
-func (ur *AddressRepository) Get() ([]a.Address, error) {
-	addresses := []a.Address{}
+func (ur *AddressRepository) Get() ([]a.Addresses, error) {
+	addresses := []a.Addresses{}
 	if err := ur.db.Find(&addresses).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return nil, err
@@ -36,9 +36,9 @@ func (ur *AddressRepository) Get() ([]a.Address, error) {
 }
 
 // ======================== Update Address =================================
-func (ur *AddressRepository) Update(addressId int, newAddress a.Address) (a.Address, error) {
+func (ur *AddressRepository) Update(addressId int, newAddress a.Addresses) (a.Addresses, error) {
 
-	var address a.Address
+	var address a.Addresses
 	ur.db.First(&address, addressId)
 
 	if err := ur.db.Model(&address).Updates(&newAddress).Error; err != nil {
@@ -51,7 +51,7 @@ func (ur *AddressRepository) Update(addressId int, newAddress a.Address) (a.Addr
 // ======================== Delete Address =================================
 func (ur *AddressRepository) Delete(addressId int) error {
 
-	var address a.Address
+	var address a.Addresses
 
 	if err := ur.db.First(&address, addressId).Error; err != nil {
 		return err
@@ -60,4 +60,5 @@ func (ur *AddressRepository) Delete(addressId int) error {
 	return nil
 
 }
+
 // ============================================================================

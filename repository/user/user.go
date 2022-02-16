@@ -16,7 +16,7 @@ func New(db *gorm.DB) *UserRepository {
 }
 
 // ======================== User Register ==================================
-func (ur *UserRepository) Insert(newUser u.User) (u.User, error) {
+func (ur *UserRepository) Insert(newUser u.Users) (u.Users, error) {
 	if err := ur.db.Save(&newUser).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return newUser, err
@@ -26,8 +26,8 @@ func (ur *UserRepository) Insert(newUser u.User) (u.User, error) {
 }
 
 // ======================== Get Users ==================================
-func (ur *UserRepository) Get() ([]u.User, error) {
-	users := []u.User{}
+func (ur *UserRepository) Get() ([]u.Users, error) {
+	users := []u.Users{}
 	if err := ur.db.Find(&users).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return nil, err
@@ -36,9 +36,9 @@ func (ur *UserRepository) Get() ([]u.User, error) {
 }
 
 // ======================== Update User ==================================
-func (ur *UserRepository) Update(userId int, newUser u.User) (u.User, error) {
+func (ur *UserRepository) Update(userId int, newUser u.Users) (u.Users, error) {
 
-	var user u.User
+	var user u.Users
 	ur.db.First(&user, userId)
 
 	if err := ur.db.Model(&user).Updates(&newUser).Error; err != nil {
@@ -51,7 +51,7 @@ func (ur *UserRepository) Update(userId int, newUser u.User) (u.User, error) {
 // ======================== Delete User ==================================
 func (ur *UserRepository) Delete(userId int) error {
 
-	var user u.User
+	var user u.Users
 
 	if err := ur.db.First(&user, userId).Error; err != nil {
 		return err
@@ -60,4 +60,5 @@ func (ur *UserRepository) Delete(userId int) error {
 	return nil
 
 }
+
 // ============================================================================

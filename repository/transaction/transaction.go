@@ -16,7 +16,7 @@ func New(db *gorm.DB) *TransactionRepository {
 }
 
 // ======================== Insert Transaction ===============================
-func (ur *TransactionRepository) Insert(newTransaction t.Transaction) (t.Transaction, error) {
+func (ur *TransactionRepository) Insert(newTransaction t.Transactions) (t.Transactions, error) {
 	if err := ur.db.Save(&newTransaction).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return newTransaction, err
@@ -26,8 +26,8 @@ func (ur *TransactionRepository) Insert(newTransaction t.Transaction) (t.Transac
 }
 
 // ======================== Get Transactions ==================================
-func (ur *TransactionRepository) Get() ([]t.Transaction, error) {
-	transactions := []t.Transaction{}
+func (ur *TransactionRepository) Get() ([]t.Transactions, error) {
+	transactions := []t.Transactions{}
 	if err := ur.db.Find(&transactions).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return nil, err
@@ -36,9 +36,9 @@ func (ur *TransactionRepository) Get() ([]t.Transaction, error) {
 }
 
 // ======================== Update Transaction ==============================
-func (ur *TransactionRepository) Update(transactionId int, newTransaction t.Transaction) (t.Transaction, error) {
+func (ur *TransactionRepository) Update(transactionId int, newTransaction t.Transactions) (t.Transactions, error) {
 
-	var transaction t.Transaction
+	var transaction t.Transactions
 	ur.db.First(&transaction, transactionId)
 
 	if err := ur.db.Model(&transaction).Updates(&newTransaction).Error; err != nil {
@@ -51,7 +51,7 @@ func (ur *TransactionRepository) Update(transactionId int, newTransaction t.Tran
 // ======================== Delete Transaction ==============================
 func (ur *TransactionRepository) Delete(transactionId int) error {
 
-	var transaction t.Transaction
+	var transaction t.Transactions
 
 	if err := ur.db.First(&transaction, transactionId).Error; err != nil {
 		return err
@@ -60,4 +60,5 @@ func (ur *TransactionRepository) Delete(transactionId int) error {
 	return nil
 
 }
+
 // ============================================================================

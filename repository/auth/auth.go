@@ -15,13 +15,15 @@ func New(db *gorm.DB) *AuthRepository {
 		db: db,
 	}
 }
+
 // =========================== Login =================================
-func (a *AuthRepository) Login(email, password string) (u.User, error) {
-	loggedInUser := u.User{Email: email, Password: password}
+func (a *AuthRepository) Login(email, password string) (u.Users, error) {
+	loggedInUser := u.Users{Email: email, Password: password}
 
 	if err := a.db.First(&loggedInUser).Error; err != nil {
 		return loggedInUser, err
 	}
 	return loggedInUser, nil
 }
+
 // ===================================================================

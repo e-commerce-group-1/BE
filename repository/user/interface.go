@@ -3,8 +3,8 @@ package user
 import u "group-project1/enitities/user"
 
 type User interface {
-	Get() ([]u.User, error)
-	Insert(newUser u.User) (u.User, error)
-	Update(userId int, newUser u.User) (u.User, error)
+	Get() ([]u.Users, error)
+	Insert(newUser u.Users) (u.Users, error)
+	Update(userId int, newUser u.Users) (u.Users, error)
 	Delete(userId int) error
 }

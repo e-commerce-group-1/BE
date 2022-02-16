@@ -16,7 +16,7 @@ func New(db *gorm.DB) *ProductRepository {
 }
 
 // ======================== Insert Product ================================
-func (ur *ProductRepository) Insert(newProduct p.Product) (p.Product, error) {
+func (ur *ProductRepository) Insert(newProduct p.Products) (p.Products, error) {
 	if err := ur.db.Save(&newProduct).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return newProduct, err
@@ -26,8 +26,8 @@ func (ur *ProductRepository) Insert(newProduct p.Product) (p.Product, error) {
 }
 
 // ======================== Get Products ==================================
-func (ur *ProductRepository) Get() ([]p.Product, error) {
-	products := []p.Product{}
+func (ur *ProductRepository) Get() ([]p.Products, error) {
+	products := []p.Products{}
 	if err := ur.db.Find(&products).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return nil, err
@@ -36,9 +36,9 @@ func (ur *ProductRepository) Get() ([]p.Product, error) {
 }
 
 // ======================== Update Product ===============================
-func (ur *ProductRepository) Update(productId int, newProduct p.Product) (p.Product, error) {
+func (ur *ProductRepository) Update(productId int, newProduct p.Products) (p.Products, error) {
 
-	var product p.Product
+	var product p.Products
 	ur.db.First(&product, productId)
 
 	if err := ur.db.Model(&product).Updates(&newProduct).Error; err != nil {
@@ -51,7 +51,7 @@ func (ur *ProductRepository) Update(productId int, newProduct p.Product) (p.Prod
 // ======================== Delete Product ===============================
 func (ur *ProductRepository) Delete(productId int) error {
 
-	var product p.Product
+	var product p.Products
 
 	if err := ur.db.First(&product, productId).Error; err != nil {
 		return err
@@ -60,4 +60,5 @@ func (ur *ProductRepository) Delete(productId int) error {
 	return nil
 
 }
+
 // ============================================================================
