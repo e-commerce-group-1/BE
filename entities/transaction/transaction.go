@@ -1,7 +1,7 @@
 package transaction
 
 import (
-	td "group-project1/enitities/transaction_detail"
+	td "group-project1/entities/transaction_detail"
 
 	"gorm.io/gorm"
 )

@@ -1,7 +1,7 @@
 package payment_method
 
 import (
-	"group-project1/enitities/order"
+	"group-project1/entities/order"
 
 	"gorm.io/gorm"
 )

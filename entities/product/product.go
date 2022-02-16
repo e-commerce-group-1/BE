@@ -3,7 +3,7 @@ package product
 import (
 	"gorm.io/gorm"
 
-	td "group-project1/enitities/transaction_detail"
+	td "group-project1/entities/transaction_detail"
 )
 
 type Products struct {

@@ -1,7 +1,7 @@
 package product_category
 
 import (
-	"group-project1/enitities/product"
+	"group-project1/entities/product"
 
 	"gorm.io/gorm"
 )

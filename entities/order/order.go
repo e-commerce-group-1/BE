@@ -1,7 +1,7 @@
 package order
 
 import (
-	"group-project1/enitities/transaction"
+	"group-project1/entities/transaction"
 	"time"
 
 	"gorm.io/gorm"

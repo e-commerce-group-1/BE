@@ -1,8 +1,8 @@
 package user
 
 import (
-	"group-project1/enitities/address"
-	"group-project1/enitities/transaction"
+	"group-project1/entities/address"
+	"group-project1/entities/transaction"
 
 	"gorm.io/gorm"
 )
