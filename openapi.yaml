@@ -940,6 +940,194 @@ paths:
                 success: true
                 message: Berhasil hapus data kategori produk
                 data: {}
+  /product-descriptions:
+    post:
+      summary: Tambah deskripsi produk baru
+      tags:
+        - Product Descriptions
+      requestBody:
+        required: true
+        description: Menambahkan deskripsi produk baru dengan input yang sesuai
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              example:
+                name: Barang impor
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                example:
+                  code: 200
+                  success: true
+                  message: Berhasil menambahkan deskripsi produk baru
+                  data:
+                    id: 1
+                    name: Barang impor
+        '400':
+          $ref: '#/components/responses/400'
+    get:
+      summary: Dapatkan semua deskripsi produk
+      tags:
+        - Product Descriptions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                example:
+                  code: 200
+                  success: true
+                  message: Berhasil mendapatkan semua deskripsi produk
+                  data:
+                  - id: 1
+                    name: Barang impor
+                  - id: 2
+                    name: Barang baru
+  /product-descriptions/{id}:  
+    put:
+      summary: Update data deskripsi produk
+      tags:
+        - Product Descriptions
+      parameters:
+        - name: id
+          in: path
+          description: ID deskripsi produk hasil generate dari sistem
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: Mengubah data deskripsi produk dengan input yang sesuai
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              example:
+                id: 1
+                name: Barang langka
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                example:
+                  code: 200
+                  success: true
+                  message: Berhasil mengupdate data deskripsi produk
+                  data:
+                    id: 1
+                    name: Barang langka
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          description: Kesalahan autorisasi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+              example:
+                  code: 401
+                  success: false
+                  message: User tidak terautorisasi
+                  data: {}
+    delete:
+      summary: Hapus sebuah deskripsi produk
+      tags:
+        - Product Descriptions
+      parameters:
+        - name: id
+          in: path
+          description: ID deskripsi produk hasil generate sistem
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/SuccessSingleResponse'
+              example:
+                code: 200
+                success: true
+                message: Berhasil hapus data deskripsi produk
+                data: {}
 components:
   parameters:
     UserID:
