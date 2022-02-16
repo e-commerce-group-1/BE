@@ -8,9 +8,9 @@ import (
 
 type Transactions struct {
 	gorm.Model
-	Total_Qty          int `gorm:"type:int(11)"`
-	Total_Price        int `gorm:"type:int(11)"`
-	User_ID            uint
-	Order_ID           uint
-	Transaction_Detail []td.Transaction_Details `gorm:"foreignKey:Transaction_ID"`
+	TotalQty          int `gorm:"type:int(11)"`
+	TotalPrice        int `gorm:"type:int(11)"`
+	UserID            uint
+	OrderID           uint
+	TransactionDetail []td.TransactionDetails `gorm:"foreignKey:TransactionID"`
 }

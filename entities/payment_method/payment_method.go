@@ -6,8 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type Payment_Methods struct {
+type PaymentMethods struct {
 	gorm.Model
-	Order []order.Orders `gorm:"foreignKey:Payment_Method_ID"`
+	Order []order.Orders `gorm:"foreignKey:PaymentMethodID"`
 	Name  string         `gorm:"type:varchar(255); not null"`
 }
