@@ -40,8 +40,8 @@ func initConfig() *AppConfig {
 	defaultConfig.Database.Name = "test"
 	defaultConfig.Database.Address = "localhost"
 	defaultConfig.Database.Port = 3306
-	defaultConfig.Database.Username = "root"
-	defaultConfig.Database.Password = "mysqlku"
+	defaultConfig.Database.Username = "admin"
+	defaultConfig.Database.Password = "admin"
 
 	viper.SetConfigType("yaml")
 	viper.SetConfigName("config")
