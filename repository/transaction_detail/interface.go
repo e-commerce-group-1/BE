@@ -1,6 +1,6 @@
 package transaction_detail
 
-import td "group-project1/enitities/transaction_detail"
+import td "group-project1/entities/transaction_detail"
 
 type Transaction_Detail interface {
 	Get() ([]td.Transaction_Details, error)

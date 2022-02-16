@@ -1,6 +1,6 @@
 package product_category
 
-import pc "group-project1/enitities/product_category"
+import pc "group-project1/entities/product_category"
 
 type Product_Category interface {
 	Get() ([]pc.Product_Categories, error)

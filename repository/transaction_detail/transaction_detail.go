@@ -1,7 +1,7 @@
 package transaction_detail
 
 import (
-	td "group-project1/enitities/transaction_detail"
+	td "group-project1/entities/transaction_detail"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"

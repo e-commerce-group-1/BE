@@ -1,7 +1,7 @@
 package payment_method
 
 import (
-	pay "group-project1/enitities/payment_method"
+	pay "group-project1/entities/payment_method"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"

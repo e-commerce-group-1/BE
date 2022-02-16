@@ -1,6 +1,6 @@
 package order
 
-import o "group-project1/enitities/order"
+import o "group-project1/entities/order"
 
 type Order interface {
 	Get() ([]o.Orders, error)

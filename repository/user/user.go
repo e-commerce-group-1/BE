@@ -1,7 +1,7 @@
 package user
 
 import (
-	u "group-project1/enitities/user"
+	u "group-project1/entities/user"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"

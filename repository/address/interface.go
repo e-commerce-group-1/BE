@@ -1,6 +1,6 @@
 package address
 
-import a "group-project1/enitities/address"
+import a "group-project1/entities/address"
 
 type Address interface {
 	Get() ([]a.Addresses, error)

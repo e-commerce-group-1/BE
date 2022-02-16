@@ -1,7 +1,7 @@
 package product
 
 import (
-	p "group-project1/enitities/product"
+	p "group-project1/entities/product"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"

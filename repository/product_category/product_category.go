@@ -1,7 +1,7 @@
 package product_category
 
 import (
-	pc "group-project1/enitities/product_category"
+	pc "group-project1/entities/product_category"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"

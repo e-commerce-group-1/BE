@@ -1,7 +1,7 @@
 package address
 
 import (
-	a "group-project1/enitities/address"
+	a "group-project1/entities/address"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"

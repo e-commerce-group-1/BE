@@ -1,7 +1,7 @@
 package order
 
 import (
-	o "group-project1/enitities/order"
+	o "group-project1/entities/order"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"

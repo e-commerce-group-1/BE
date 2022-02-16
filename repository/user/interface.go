@@ -1,6 +1,6 @@
 package user
 
-import u "group-project1/enitities/user"
+import u "group-project1/entities/user"
 
 type User interface {
 	Get() ([]u.Users, error)

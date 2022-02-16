@@ -1,7 +1,7 @@
 package auth
 
 import (
-	u "group-project1/enitities/user"
+	u "group-project1/entities/user"
 
 	"gorm.io/gorm"
 )

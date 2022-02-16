@@ -1,6 +1,6 @@
 package product
 
-import p "group-project1/enitities/product"
+import p "group-project1/entities/product"
 
 type Product interface {
 	Get() ([]p.Products, error)

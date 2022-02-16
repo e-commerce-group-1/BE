@@ -1,7 +1,7 @@
 package transaction
 
 import (
-	t "group-project1/enitities/transaction"
+	t "group-project1/entities/transaction"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"

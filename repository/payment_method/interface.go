@@ -1,6 +1,6 @@
 package payment_method
 
-import pay "group-project1/enitities/payment_method"
+import pay "group-project1/entities/payment_method"
 
 type Payment_Method interface {
 	Get() ([]pay.Payment_Methods, error)

@@ -1,6 +1,6 @@
 package transaction
 
-import tr "group-project1/enitities/transaction"
+import tr "group-project1/entities/transaction"
 
 type Transaction interface {
 	Get() ([]tr.Transactions, error)
