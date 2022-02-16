@@ -16,7 +16,7 @@ func New(db *gorm.DB) *PaymentMethodRepository {
 }
 
 // ======================== Insert Payment Method ================================
-func (ur *PaymentMethodRepository) Insert(newPayMethod pay.Payment_Methods) (pay.Payment_Methods, error) {
+func (ur *PaymentMethodRepository) Insert(newPayMethod pay.PaymentMethods) (pay.PaymentMethods, error) {
 	if err := ur.db.Save(&newPayMethod).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return newPayMethod, err
@@ -26,8 +26,8 @@ func (ur *PaymentMethodRepository) Insert(newPayMethod pay.Payment_Methods) (pay
 }
 
 // ======================== Get Payment Methods ==================================
-func (ur *PaymentMethodRepository) Get() ([]pay.Payment_Methods, error) {
-	payment_methods := []pay.Payment_Methods{}
+func (ur *PaymentMethodRepository) Get() ([]pay.PaymentMethods, error) {
+	payment_methods := []pay.PaymentMethods{}
 	if err := ur.db.Find(&payment_methods).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return nil, err
@@ -36,9 +36,9 @@ func (ur *PaymentMethodRepository) Get() ([]pay.Payment_Methods, error) {
 }
 
 // ======================== Update Payment Method ===============================
-func (ur *PaymentMethodRepository) Update(payment_methodId int, newPayMethod pay.Payment_Methods) (pay.Payment_Methods, error) {
+func (ur *PaymentMethodRepository) Update(payment_methodId int, newPayMethod pay.PaymentMethods) (pay.PaymentMethods, error) {
 
-	var payment_method pay.Payment_Methods
+	var payment_method pay.PaymentMethods
 	ur.db.First(&payment_method, payment_methodId)
 
 	if err := ur.db.Model(&payment_method).Updates(&newPayMethod).Error; err != nil {
@@ -51,7 +51,7 @@ func (ur *PaymentMethodRepository) Update(payment_methodId int, newPayMethod pay
 // ======================== Delete Payment Method ===============================
 func (ur *PaymentMethodRepository) Delete(payment_methodId int) error {
 
-	var payment_method pay.Payment_Methods
+	var payment_method pay.PaymentMethods
 
 	if err := ur.db.First(&payment_method, payment_methodId).Error; err != nil {
 		return err
