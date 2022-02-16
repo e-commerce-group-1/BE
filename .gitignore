@@ -1,2 +1,4 @@
 configs/config.yaml
 *.jpg
+*.json
+*.yaml
