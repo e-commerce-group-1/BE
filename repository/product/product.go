@@ -1,9 +1,9 @@
 package product
 
 import (
+	"errors"
 	p "group-project1/entities/product"
 
-	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -16,49 +16,41 @@ func New(db *gorm.DB) *ProductRepository {
 }
 
 // ======================== Insert Product ================================
-func (ur *ProductRepository) Insert(newProduct p.Products) (p.Products, error) {
-	if err := ur.db.Save(&newProduct).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return newProduct, err
+func (ur *ProductRepository) Insert(NewProduct p.Products) (p.Products, error) {
+	if err := ur.db.Create(&NewProduct).Error; err != nil {
+		return NewProduct, err
 	}
-
-	return newProduct, nil
+	return NewProduct, nil
 }
 
 // ======================== Get Products ==================================
 func (ur *ProductRepository) Get() ([]p.Products, error) {
 	products := []p.Products{}
-	if err := ur.db.Find(&products).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return nil, err
+	ur.db.Find(&products)
+	if len(products) == 0 {
+		return nil, errors.New("belum ada produk yang terdaftar")
 	}
 	return products, nil
 }
 
 // ======================== Update Product ===============================
-func (ur *ProductRepository) Update(productId int, newProduct p.Products) (p.Products, error) {
-
-	var product p.Products
-	ur.db.First(&product, productId)
-
-	if err := ur.db.Model(&product).Updates(&newProduct).Error; err != nil {
-		return product, err
+func (ur *ProductRepository) Update(UpdatedProduct p.Products) (p.Products, error) {
+	res := ur.db.Model(&UpdatedProduct).Updates(UpdatedProduct)
+	if res.RowsAffected == 0 {
+		return UpdatedProduct, errors.New("tidak ada pemutakhiran pada data produk")
 	}
-
-	return product, nil
+	ur.db.First(&UpdatedProduct)
+	return UpdatedProduct, nil
 }
 
 // ======================== Delete Product ===============================
-func (ur *ProductRepository) Delete(productId int) error {
-
+func (ur *ProductRepository) Delete(ID int) error {
 	var product p.Products
-
-	if err := ur.db.First(&product, productId).Error; err != nil {
-		return err
+	res := ur.db.Delete(&product, ID)
+	if res.RowsAffected == 0 {
+		return errors.New("tidak ada produk yang dihapus")
 	}
-	ur.db.Delete(&product, productId)
 	return nil
-
 }
 
 // ============================================================================
