@@ -6,5 +6,5 @@ type User interface {
 	Insert(newUser u.Users) (u.Users, error)
 	Get() ([]u.Users, error)
 	Update(userUpdate u.Users) (u.Users, error)
-	Delete(userId int) error
+	Delete(ID int) error
 }
