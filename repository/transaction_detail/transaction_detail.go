@@ -16,7 +16,7 @@ func New(db *gorm.DB) *TransactionDetailRepository {
 }
 
 // ======================== Insert Transaction Detail ===============================
-func (ur *TransactionDetailRepository) Insert(newTransactionDetail td.Transaction_Details) (td.Transaction_Details, error) {
+func (ur *TransactionDetailRepository) Insert(newTransactionDetail td.TransactionDetails) (td.TransactionDetails, error) {
 	if err := ur.db.Save(&newTransactionDetail).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return newTransactionDetail, err
@@ -26,8 +26,8 @@ func (ur *TransactionDetailRepository) Insert(newTransactionDetail td.Transactio
 }
 
 // ======================== Get Transaction Details ==================================
-func (ur *TransactionDetailRepository) Get() ([]td.Transaction_Details, error) {
-	transaction_details := []td.Transaction_Details{}
+func (ur *TransactionDetailRepository) Get() ([]td.TransactionDetails, error) {
+	transaction_details := []td.TransactionDetails{}
 	if err := ur.db.Find(&transaction_details).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return nil, err
@@ -36,9 +36,9 @@ func (ur *TransactionDetailRepository) Get() ([]td.Transaction_Details, error) {
 }
 
 // ======================== Update Transaction Detail ==============================
-func (ur *TransactionDetailRepository) Update(transaction_detailId int, newTransactionDetail td.Transaction_Details) (td.Transaction_Details, error) {
+func (ur *TransactionDetailRepository) Update(transaction_detailId int, newTransactionDetail td.TransactionDetails) (td.TransactionDetails, error) {
 
-	var transaction_detail td.Transaction_Details
+	var transaction_detail td.TransactionDetails
 	ur.db.First(&transaction_detail, transaction_detailId)
 
 	if err := ur.db.Model(&transaction_detail).Updates(&newTransactionDetail).Error; err != nil {
@@ -51,7 +51,7 @@ func (ur *TransactionDetailRepository) Update(transaction_detailId int, newTrans
 // ======================== Delete Transaction Detail ==============================
 func (ur *TransactionDetailRepository) Delete(transaction_detailId int) error {
 
-	var transaction_detail td.Transaction_Details
+	var transaction_detail td.TransactionDetails
 
 	if err := ur.db.First(&transaction_detail, transaction_detailId).Error; err != nil {
 		return err

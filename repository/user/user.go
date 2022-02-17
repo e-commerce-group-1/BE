@@ -1,9 +1,9 @@
 package user
 
 import (
+	"errors"
 	u "group-project1/entities/user"
 
-	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -17,46 +17,39 @@ func New(db *gorm.DB) *UserRepository {
 
 // ======================== User Register ==================================
 func (ur *UserRepository) Insert(newUser u.Users) (u.Users, error) {
-	if err := ur.db.Save(&newUser).Error; err != nil {
-		log.Warn("Found database error:", err)
+	if err := ur.db.Create(&newUser).Error; err != nil {
 		return newUser, err
 	}
-
 	return newUser, nil
 }
 
 // ======================== Get Users ==================================
 func (ur *UserRepository) Get() ([]u.Users, error) {
 	users := []u.Users{}
-	if err := ur.db.Find(&users).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return nil, err
+	ur.db.Find(&users)
+	if len(users) < 1 {
+		return nil, errors.New("belum ada user yang terdaftar")
 	}
 	return users, nil
 }
 
 // ======================== Update User ==================================
-func (ur *UserRepository) Update(userId int, newUser u.Users) (u.Users, error) {
-
-	var user u.Users
-	ur.db.First(&user, userId)
-
-	if err := ur.db.Model(&user).Updates(&newUser).Error; err != nil {
-		return user, err
+func (ur *UserRepository) Update(userUpdate u.Users) (u.Users, error) {
+	res := ur.db.Model(&userUpdate).Updates(userUpdate)
+	if res.RowsAffected == 0 {
+		return userUpdate, errors.New("tidak ada pemutakhiran pada data user")
 	}
-
-	return user, nil
+	ur.db.First(&userUpdate)
+	return userUpdate, nil
 }
 
 // ======================== Delete User ==================================
 func (ur *UserRepository) Delete(userId int) error {
-
 	var user u.Users
-
-	if err := ur.db.First(&user, userId).Error; err != nil {
-		return err
+	res := ur.db.Delete(&user, userId)
+	if res.RowsAffected == 0 {
+		return errors.New("tidak ada user yang dihapus")
 	}
-	ur.db.Delete(&user, userId)
 	return nil
 
 }
