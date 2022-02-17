@@ -5,7 +5,7 @@ import "group-project1/entities/user"
 // =================== Create User =======================
 type CreateUserRequestFormat struct {
 	Name string `json:"name" form:"name"`
-	User_name string `json:"user_name" form:"user_name"`
+	UserName string `json:"username" form:"username"`
 	Email string `json:"email" form:"email"`
 	Password string `json:"password" form:"password"`
 }
@@ -28,7 +28,7 @@ type GetUsersResponseFormat struct {
 // =================== Update User =======================
 type UpdateUserRequestFormat struct {
 	Name string `json:"name" form:"name"`
-	User_name string `json:"user_name" form:"user_name"`
+	UserName string `json:"username" form:"username"`
 	Email string `json:"email" form:"email"`
 	Password string `json:"password" form:"password"`
 }

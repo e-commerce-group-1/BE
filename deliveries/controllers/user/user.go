@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"group-project1/entities/user"
 	userRepo "group-project1/repository/user"
-	"strconv"
+	"group-project1/deliveries/controllers/auth"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
+	"fmt"
 )
 
 type UserController struct {
@@ -46,7 +47,7 @@ func (uc UserController) Insert() echo.HandlerFunc {
 
 		newUser := user.Users{
 			Name: requestFormat.Name,
-			User_name: requestFormat.User_name,
+			UserName: requestFormat.UserName,
 			Email: requestFormat.Email,
 			Password: requestFormat.Password,
 		}
@@ -69,15 +70,14 @@ func (uc UserController) Insert() echo.HandlerFunc {
 func (uc *UserController) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var newUser = UpdateUserRequestFormat{}
-		userId, _ := strconv.Atoi(c.Param("id"))
 
 		if err := c.Bind(&newUser); err != nil {
 			return c.JSON(http.StatusBadRequest, "Ada yang salah dengan input")
 		}
 
-		res, err := uc.Repo.Update(userId, user.Users{
+		res, err := uc.Repo.Update(user.Users{
 			Name: newUser.Name,
-			User_name: newUser.User_name,
+			UserName: newUser.UserName,
 			Email: newUser.Email,
 			Password: newUser.Password,
 		})
@@ -97,8 +97,8 @@ func (uc *UserController) Update() echo.HandlerFunc {
 
 func (uc *UserController) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userId, _ := strconv.Atoi(c.Param("id"))
-
+		userId := int(auth.ExtractTokenUserId(c))
+		fmt.Println("ini adalah nilai ekstrak token id : ", userId)
 		err := uc.Repo.Delete(userId)
 
 		if err != nil {
@@ -108,7 +108,7 @@ func (uc *UserController) Delete() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, UpdateUserResponseFormat{
 			Code: 200,
 			Success: true,
-			Message: "Success Update User",
+			Message: "Success Delete User",
 		})
 	}
 }
