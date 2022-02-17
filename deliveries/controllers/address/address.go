@@ -1,7 +1,7 @@
 package address
 
 import (
-	"group-project1/deliveries/controllers/auth"
+	"group-project1/deliveries/middlewares"
 	"group-project1/entities/address"
 	addressRepo "group-project1/repository/address"
 	"net/http"
@@ -28,10 +28,10 @@ func (ac *AddressController) Get() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, GetAddressesResponseFormat{
-			Code: 200,
+			Code:    200,
 			Success: true,
 			Message: "Success Get Addresses",
-			Data: res,
+			Data:    res,
 		})
 	}
 }
@@ -39,18 +39,18 @@ func (ac *AddressController) Get() echo.HandlerFunc {
 func (ac *AddressController) Insert() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		requestFormat := CreateAddressRequestFormat{}
-		userId := int(auth.ExtractTokenUserId(c))
+		userId := int(middlewares.ExtractTokenUserId(c))
 
 		if err := c.Bind(&requestFormat); err != nil {
 			return c.JSON(http.StatusBadRequest, "Ada yang salah dengan input")
 		}
 
 		res, err := ac.Repo.Insert(address.Addresses{
-			Street: requestFormat.Street,
-			City: requestFormat.City,
+			Street:   requestFormat.Street,
+			City:     requestFormat.City,
 			Province: requestFormat.Province,
-			ZipCode: requestFormat.ZipCode,
-			UserID: uint(userId),
+			ZipCode:  requestFormat.ZipCode,
+			UserID:   uint(userId),
 		})
 
 		if err != nil {
@@ -58,10 +58,10 @@ func (ac *AddressController) Insert() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, CreateAddressResponseFormat{
-			Code: 200,
+			Code:    200,
 			Success: true,
 			Message: "Success Create Address",
-			Data: res,
+			Data:    res,
 		})
 	}
 }
@@ -74,10 +74,10 @@ func (ac *AddressController) Update() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, "Ada yang salah dengan input")
 		}
 		res, err := ac.Repo.Update(address.Addresses{
-			Street: newAddress.Street,
-			City: newAddress.City,
+			Street:   newAddress.Street,
+			City:     newAddress.City,
 			Province: newAddress.Province,
-			ZipCode: newAddress.ZipCode,
+			ZipCode:  newAddress.ZipCode,
 		})
 
 		if err != nil {
@@ -85,10 +85,10 @@ func (ac *AddressController) Update() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, UpdateAddressResponseFormat{
-			Code: 200,
+			Code:    200,
 			Success: true,
 			Message: "Success Update Address",
-			Data: res,
+			Data:    res,
 		})
 	}
 }
@@ -105,10 +105,10 @@ func (ac *AddressController) Delete() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, DeleteAddressResponseFormat{
-			Code: 200,
+			Code:    200,
 			Success: true,
 			Message: "Success Delete Address",
-			Data: address,
+			Data:    address,
 		})
 	}
 }
