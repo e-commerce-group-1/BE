@@ -1,9 +1,9 @@
 package transaction_detail
 
 import (
+	"errors"
 	td "group-project1/entities/transaction_detail"
 
-	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -16,49 +16,41 @@ func New(db *gorm.DB) *TransactionDetailRepository {
 }
 
 // ======================== Insert Transaction Detail ===============================
-func (ur *TransactionDetailRepository) Insert(newTransactionDetail td.TransactionDetails) (td.TransactionDetails, error) {
-	if err := ur.db.Save(&newTransactionDetail).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return newTransactionDetail, err
+func (ur *TransactionDetailRepository) Insert(NewTransactionDetail td.TransactionDetails) (td.TransactionDetails, error) {
+	if err := ur.db.Create(&NewTransactionDetail).Error; err != nil {
+		return NewTransactionDetail, err
 	}
-
-	return newTransactionDetail, nil
+	return NewTransactionDetail, nil
 }
 
 // ======================== Get Transaction Details ==================================
 func (ur *TransactionDetailRepository) Get() ([]td.TransactionDetails, error) {
 	transaction_details := []td.TransactionDetails{}
-	if err := ur.db.Find(&transaction_details).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return nil, err
+	ur.db.Find(&transaction_details)
+	if len(transaction_details) < 1 {
+		return nil, errors.New("belum ada detail tranasaksi yang terdaftar")
 	}
 	return transaction_details, nil
 }
 
 // ======================== Update Transaction Detail ==============================
-func (ur *TransactionDetailRepository) Update(transaction_detailId int, newTransactionDetail td.TransactionDetails) (td.TransactionDetails, error) {
-
-	var transaction_detail td.TransactionDetails
-	ur.db.First(&transaction_detail, transaction_detailId)
-
-	if err := ur.db.Model(&transaction_detail).Updates(&newTransactionDetail).Error; err != nil {
-		return transaction_detail, err
+func (ur *TransactionDetailRepository) Update(UpdatedTransactionDetail td.TransactionDetails) (td.TransactionDetails, error) {
+	res := ur.db.Model(&UpdatedTransactionDetail).Updates(UpdatedTransactionDetail)
+	if res.RowsAffected == 0 {
+		return UpdatedTransactionDetail, errors.New("tidak ada pemutakhiran pada data detail transaksi")
 	}
-
-	return transaction_detail, nil
+	ur.db.First(&UpdatedTransactionDetail)
+	return UpdatedTransactionDetail, nil
 }
 
 // ======================== Delete Transaction Detail ==============================
-func (ur *TransactionDetailRepository) Delete(transaction_detailId int) error {
-
+func (ur *TransactionDetailRepository) Delete(ID int) error {
 	var transaction_detail td.TransactionDetails
-
-	if err := ur.db.First(&transaction_detail, transaction_detailId).Error; err != nil {
-		return err
+	res := ur.db.Delete(&transaction_detail, ID)
+	if res.RowsAffected == 0 {
+		return errors.New("tidak ada detail transaksi yang dihapus")
 	}
-	ur.db.Delete(&transaction_detail, transaction_detailId)
 	return nil
-
 }
 
 // ============================================================================
