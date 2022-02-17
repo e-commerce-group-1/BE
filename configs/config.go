@@ -45,7 +45,7 @@ func initConfig() *AppConfig {
 
 	viper.SetConfigType("yaml")
 	viper.SetConfigName("config")
-	viper.AddConfigPath("./layered/configs/")
+	viper.AddConfigPath("./configs/")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Info("failed to open file")
 		return &defaultConfig
