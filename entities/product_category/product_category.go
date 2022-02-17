@@ -6,8 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type Product_Categories struct {
+type ProductCategories struct {
 	gorm.Model
 	Name    string             `gorm:"type:varchar(255)"`
-	Product []product.Products `gorm:"foreignKey:Product_Category_ID"`
+	Product []product.Products `gorm:"foreignKey:ProductCategoryID"`
 }

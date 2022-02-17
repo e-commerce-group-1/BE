@@ -7,7 +7,7 @@ type CreateAddressRequestFormat struct {
 	Street string `json:"street" form:"street"`
 	City string `json:"city" form:"city"`
 	Province string `json:"province" form:"province"`
-	Zipcode string `json:"zipcode" form:"zipcode"`
+	ZipCode string `json:"zipcode" form:"zipcode"`
 }
 
 type CreateAddressResponseFormat struct {
@@ -30,7 +30,7 @@ type UpdateAddressRequestFormat struct {
 	Street string `json:"street" form:"street"`
 	City string `json:"city" form:"city"`
 	Province string `json:"province" form:"province"`
-	Zipcode string `json:"zipcode" form:"zipcode"`
+	ZipCode string `json:"zipcode" form:"zipcode"`
 }
 
 type UpdateAddressResponseFormat struct {

@@ -3,6 +3,15 @@ module group-project1
 go 1.17
 
 require (
+	github.com/labstack/gommon v0.3.1
+	github.com/magiconair/properties v1.8.5
+	github.com/spf13/viper v1.10.1
+	github.com/stretchr/testify v1.7.0
+	gorm.io/driver/mysql v1.2.3
+	gorm.io/gorm v1.22.5
+)
+
+require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
@@ -22,9 +31,6 @@ require (
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.10.1 // indirect
-	github.com/stretchr/objx v0.1.0 // indirect
-	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
@@ -36,6 +42,4 @@ require (
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
-	gorm.io/driver/mysql v1.2.3 // indirect
-	gorm.io/gorm v1.22.5 // indirect
 )

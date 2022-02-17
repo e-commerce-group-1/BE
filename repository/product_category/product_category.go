@@ -16,7 +16,7 @@ func New(db *gorm.DB) *ProductCategoryRepository {
 }
 
 // ======================== Insert Product Category ================================
-func (ur *ProductCategoryRepository) Insert(newProductCategory pc.Product_Categories) (pc.Product_Categories, error) {
+func (ur *ProductCategoryRepository) Insert(newProductCategory pc.ProductCategories) (pc.ProductCategories, error) {
 	if err := ur.db.Save(&newProductCategory).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return newProductCategory, err
@@ -26,8 +26,8 @@ func (ur *ProductCategoryRepository) Insert(newProductCategory pc.Product_Catego
 }
 
 // ======================== Get Product Categories ==================================
-func (ur *ProductCategoryRepository) Get() ([]pc.Product_Categories, error) {
-	product_categories := []pc.Product_Categories{}
+func (ur *ProductCategoryRepository) Get() ([]pc.ProductCategories, error) {
+	product_categories := []pc.ProductCategories{}
 	if err := ur.db.Find(&product_categories).Error; err != nil {
 		log.Warn("Found database error:", err)
 		return nil, err
@@ -36,9 +36,9 @@ func (ur *ProductCategoryRepository) Get() ([]pc.Product_Categories, error) {
 }
 
 // ======================== Update Product Category ===============================
-func (ur *ProductCategoryRepository) Update(product_categoryId int, newProductCategory pc.Product_Categories) (pc.Product_Categories, error) {
+func (ur *ProductCategoryRepository) Update(product_categoryId int, newProductCategory pc.ProductCategories) (pc.ProductCategories, error) {
 
-	var product_category pc.Product_Categories
+	var product_category pc.ProductCategories
 	ur.db.First(&product_category, product_categoryId)
 
 	if err := ur.db.Model(&product_category).Updates(&newProductCategory).Error; err != nil {
@@ -51,7 +51,7 @@ func (ur *ProductCategoryRepository) Update(product_categoryId int, newProductCa
 // ======================== Delete Product Category ===============================
 func (ur *ProductCategoryRepository) Delete(product_categoryId int) error {
 
-	var product_category pc.Product_Categories
+	var product_category pc.ProductCategories
 
 	if err := ur.db.First(&product_category, product_categoryId).Error; err != nil {
 		return err
