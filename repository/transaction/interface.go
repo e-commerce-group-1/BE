@@ -3,8 +3,8 @@ package transaction
 import tr "group-project1/entities/transaction"
 
 type Transaction interface {
+	Insert(NewTransaction tr.Transactions) (tr.Transactions, error)
 	Get() ([]tr.Transactions, error)
-	Insert(newTransaction tr.Transactions) (tr.Transactions, error)
-	Update(trId int, newTransaction tr.Transactions) (tr.Transactions, error)
-	Delete(trId int) error
+	Update(UpdatedTransaction tr.Transactions) (tr.Transactions, error)
+	Delete(ID int) error
 }
