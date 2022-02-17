@@ -4,7 +4,6 @@ import (
 	"errors"
 	u "group-project1/entities/user"
 
-	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -19,7 +18,6 @@ func New(db *gorm.DB) *UserRepository {
 // ======================== User Register ==================================
 func (ur *UserRepository) Insert(newUser u.Users) (u.Users, error) {
 	if err := ur.db.Create(&newUser).Error; err != nil {
-		log.Warn("terdapat error di dalam database:", err)
 		return newUser, err
 	}
 	return newUser, nil
