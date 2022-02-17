@@ -83,11 +83,10 @@ func (uc *UserController) Update() echo.HandlerFunc {
 func (uc *UserController) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		UserID := middlewares.ExtractTokenUserId(c)
-		// fmt.Println("ini adalah nilai ekstrak token id : ", UserID)
 		err := uc.repo.Delete(UserID)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses update user", err))
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses menghapus user", err))
 	}
 }
