@@ -1,114 +1,93 @@
 package user
 
 import (
-	"net/http"
+	"group-project1/deliveries/controllers/common"
+	"group-project1/deliveries/middlewares"
 	"group-project1/entities/user"
 	userRepo "group-project1/repository/user"
-	"group-project1/deliveries/controllers/auth"
+	"net/http"
+
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
-	"fmt"
+	"gorm.io/gorm"
 )
 
 type UserController struct {
-	Repo userRepo.User
+	repo userRepo.User
 }
 
-func New(user userRepo.User) *UserController {
-	return &UserController{Repo: user}
-}
-
-func (uc UserController) Get() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		users, err := uc.Repo.Get()
-
-		if err != nil {
-			log.Info("Got error here")
-			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-				"message": "Something wrong",
-			})
-		}
-		return c.JSON(http.StatusOK, GetUsersResponseFormat{
-			Code: 200,
-			Success: true,
-			Message: "Success Get All User",
-			Data: users,
-		})
+func New(repository userRepo.User) *UserController {
+	return &UserController{
+		repo: repository,
 	}
 }
 
-func (uc UserController) Insert() echo.HandlerFunc {
+func (uc *UserController) Insert() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		requestFormat := CreateUserRequestFormat{}
+		NewUser := CreateUserRequestFormat{}
 
-		if err := c.Bind(&requestFormat); err != nil {
-			return c.JSON(http.StatusBadRequest, "Ada yang salah dengan input")
+		if err := c.Bind(&NewUser); err != nil || NewUser.Name == "" || NewUser.Email == "" || NewUser.Password == "" {
+			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
 
 		newUser := user.Users{
-			Name: requestFormat.Name,
-			UserName: requestFormat.UserName,
-			Email: requestFormat.Email,
-			Password: requestFormat.Password,
+			Name:     NewUser.Name,
+			UserName: NewUser.UserName,
+			Email:    NewUser.Email,
+			Password: NewUser.Password,
 		}
-
-		res, err := uc.Repo.Insert(newUser)
+		res, err := uc.repo.Insert(newUser)
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Gagal Memasukkan Data User")
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
+		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan user baru", res))
+	}
+}
 
-		return c.JSON(http.StatusOK, CreateUserResponseFormat{
-			Code: 200,
-			Success: true,
-			Message: "Success Create User",
-			Data: res,
-		})
+func (uc *UserController) Get() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// UserID := middlewares.ExtractTokenUserId(c)
+		res, err := uc.repo.Get()
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
+		}
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan semua user", res))
 	}
 }
 
 func (uc *UserController) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var newUser = UpdateUserRequestFormat{}
+		UserID := middlewares.ExtractTokenUserId(c)
+		var UpdatedUser = UpdateUserRequestFormat{}
 
-		if err := c.Bind(&newUser); err != nil {
-			return c.JSON(http.StatusBadRequest, "Ada yang salah dengan input")
+		if err := c.Bind(&UpdatedUser); err != nil {
+			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
 
-		res, err := uc.Repo.Update(user.Users{
-			Name: newUser.Name,
-			UserName: newUser.UserName,
-			Email: newUser.Email,
-			Password: newUser.Password,
+		res, err := uc.repo.Update(user.Users{
+			Model:    gorm.Model{ID: uint(UserID)},
+			Name:     UpdatedUser.Name,
+			UserName: UpdatedUser.UserName,
+			Email:    UpdatedUser.Email,
+			Password: UpdatedUser.Password,
 		})
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Gagal Memperbaharui Data User")
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-
-		return c.JSON(http.StatusOK, UpdateUserResponseFormat{
-			Code: 200,
-			Success: true,
-			Message: "Success Update User",
-			Data: res,
-		})
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses update user", res))
 	}
 }
 
 func (uc *UserController) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userId := int(auth.ExtractTokenUserId(c))
-		fmt.Println("ini adalah nilai ekstrak token id : ", userId)
-		err := uc.Repo.Delete(userId)
-
+		UserID := middlewares.ExtractTokenUserId(c)
+		// fmt.Println("ini adalah nilai ekstrak token id : ", UserID)
+		err := uc.repo.Delete(UserID)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Gagal Menghapus User")
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-
-		return c.JSON(http.StatusOK, UpdateUserResponseFormat{
-			Code: 200,
-			Success: true,
-			Message: "Success Delete User",
-		})
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses update user", err))
 	}
 }
