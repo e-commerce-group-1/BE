@@ -1,9 +1,9 @@
 package address
 
 import (
+	"errors"
 	a "group-project1/entities/address"
 
-	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -16,49 +16,41 @@ func New(db *gorm.DB) *AddressRepository {
 }
 
 // ======================== Insert Address ==================================
-func (ur *AddressRepository) Insert(newAddress a.Addresses) (a.Addresses, error) {
-	if err := ur.db.Save(&newAddress).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return newAddress, err
+func (ur *AddressRepository) Insert(NewAddress a.Addresses) (a.Addresses, error) {
+	if err := ur.db.Create(&NewAddress).Error; err != nil {
+		return NewAddress, err
 	}
-
-	return newAddress, nil
+	return NewAddress, nil
 }
 
 // ======================== Get Addresses ==================================
 func (ur *AddressRepository) Get() ([]a.Addresses, error) {
 	addresses := []a.Addresses{}
-	if err := ur.db.Find(&addresses).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return nil, err
+	ur.db.Find(&addresses)
+	if len(addresses) == 0 {
+		return nil, errors.New("belum ada alamat yang terdaftar")
 	}
 	return addresses, nil
 }
 
 // ======================== Update Address =================================
-func (ur *AddressRepository) Update(addressId int, newAddress a.Addresses) (a.Addresses, error) {
-
-	var address a.Addresses
-	ur.db.First(&address, addressId)
-
-	if err := ur.db.Model(&address).Updates(&newAddress).Error; err != nil {
-		return address, err
+func (ur *AddressRepository) Update(UpdatedAddress a.Addresses) (a.Addresses, error) {
+	res := ur.db.Model(&UpdatedAddress).Updates(UpdatedAddress)
+	if res.RowsAffected == 0 {
+		return UpdatedAddress, errors.New("tidak ada pemutakhiran pada data alamat")
 	}
-
-	return address, nil
+	ur.db.First(&UpdatedAddress)
+	return UpdatedAddress, nil
 }
 
 // ======================== Delete Address =================================
 func (ur *AddressRepository) Delete(addressId int) error {
-
 	var address a.Addresses
-
-	if err := ur.db.First(&address, addressId).Error; err != nil {
-		return err
+	res := ur.db.Delete(&address, addressId)
+	if res.RowsAffected == 0 {
+		return errors.New("tidak ada alamat yang dihapus")
 	}
-	ur.db.Delete(&address, addressId)
 	return nil
-
 }
 
 // ============================================================================
