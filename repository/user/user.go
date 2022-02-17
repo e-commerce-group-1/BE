@@ -51,7 +51,6 @@ func (ur *UserRepository) Delete(ID int) error {
 		return errors.New("tidak ada user yang dihapus")
 	}
 	return nil
-
 }
 
 // ============================================================================
