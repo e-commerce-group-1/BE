@@ -17,7 +17,7 @@ func New(db *gorm.DB) *OrderRepository {
 
 // ======================== Insert Order =================================
 func (ur *OrderRepository) Insert(NewOrder o.Orders) (o.Orders, error) {
-	if err := ur.db.Save(&NewOrder).Error; err != nil {
+	if err := ur.db.Create(&NewOrder).Error; err != nil {
 		return NewOrder, err
 	}
 	return NewOrder, nil
