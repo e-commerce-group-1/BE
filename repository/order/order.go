@@ -1,9 +1,9 @@
 package order
 
 import (
+	"errors"
 	o "group-project1/entities/order"
 
-	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -16,49 +16,40 @@ func New(db *gorm.DB) *OrderRepository {
 }
 
 // ======================== Insert Order =================================
-func (ur *OrderRepository) Insert(newOrder o.Orders) (o.Orders, error) {
-	if err := ur.db.Save(&newOrder).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return newOrder, err
+func (ur *OrderRepository) Insert(NewOrder o.Orders) (o.Orders, error) {
+	if err := ur.db.Create(&NewOrder).Error; err != nil {
+		return NewOrder, err
 	}
-
-	return newOrder, nil
+	return NewOrder, nil
 }
 
 // ======================== Get Orders ==================================
 func (ur *OrderRepository) Get() ([]o.Orders, error) {
 	orders := []o.Orders{}
-	if err := ur.db.Find(&orders).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return nil, err
+	ur.db.Find(&orders)
+	if len(orders) == 0 {
+		return nil, errors.New("belum ada order yang terdaftar")
 	}
 	return orders, nil
 }
 
 // ======================== Update Order ================================
-func (ur *OrderRepository) Update(orderId int, newOrder o.Orders) (o.Orders, error) {
-
-	var order o.Orders
-	ur.db.First(&order, orderId)
-
-	if err := ur.db.Model(&order).Updates(&newOrder).Error; err != nil {
-		return order, err
+func (ur *OrderRepository) Update(UpdatedOrder o.Orders) (o.Orders, error) {
+	res := ur.db.Model(&UpdatedOrder).Updates(UpdatedOrder)
+	if res.RowsAffected == 0 {
+		return UpdatedOrder, errors.New("tidak ada pemutakhiran pada data order")
 	}
-
-	return order, nil
+	return UpdatedOrder, nil
 }
 
 // ======================== Delete Order ================================
-func (ur *OrderRepository) Delete(orderId int) error {
-
+func (ur *OrderRepository) Delete(ID int) error {
 	var order o.Orders
-
-	if err := ur.db.First(&order, orderId).Error; err != nil {
-		return err
+	res := ur.db.Delete(&order, ID)
+	if res.RowsAffected == 0 {
+		return errors.New("tidak ada order yang dihapus")
 	}
-	ur.db.Delete(&order, orderId)
 	return nil
-
 }
 
 // ============================================================================

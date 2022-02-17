@@ -44,14 +44,13 @@ func (ur *UserRepository) Update(userUpdate u.Users) (u.Users, error) {
 }
 
 // ======================== Delete User ==================================
-func (ur *UserRepository) Delete(userId int) error {
+func (ur *UserRepository) Delete(ID int) error {
 	var user u.Users
-	res := ur.db.Delete(&user, userId)
+	res := ur.db.Delete(&user, ID)
 	if res.RowsAffected == 0 {
 		return errors.New("tidak ada user yang dihapus")
 	}
 	return nil
-
 }
 
 // ============================================================================

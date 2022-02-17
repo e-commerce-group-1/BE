@@ -1,9 +1,9 @@
 package payment_method
 
 import (
+	"errors"
 	pay "group-project1/entities/payment_method"
 
-	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -16,49 +16,41 @@ func New(db *gorm.DB) *PaymentMethodRepository {
 }
 
 // ======================== Insert Payment Method ================================
-func (ur *PaymentMethodRepository) Insert(newPayMethod pay.PaymentMethods) (pay.PaymentMethods, error) {
-	if err := ur.db.Save(&newPayMethod).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return newPayMethod, err
+func (ur *PaymentMethodRepository) Insert(NewPayMethod pay.PaymentMethods) (pay.PaymentMethods, error) {
+	if err := ur.db.Create(&NewPayMethod).Error; err != nil {
+		return NewPayMethod, err
 	}
-
-	return newPayMethod, nil
+	return NewPayMethod, nil
 }
 
 // ======================== Get Payment Methods ==================================
 func (ur *PaymentMethodRepository) Get() ([]pay.PaymentMethods, error) {
 	payment_methods := []pay.PaymentMethods{}
-	if err := ur.db.Find(&payment_methods).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return nil, err
+	ur.db.Find(&payment_methods)
+	if len(payment_methods) == 0 {
+		return nil, errors.New("belum ada payment method yang terdaftar")
 	}
 	return payment_methods, nil
 }
 
 // ======================== Update Payment Method ===============================
-func (ur *PaymentMethodRepository) Update(payment_methodId int, newPayMethod pay.PaymentMethods) (pay.PaymentMethods, error) {
-
-	var payment_method pay.PaymentMethods
-	ur.db.First(&payment_method, payment_methodId)
-
-	if err := ur.db.Model(&payment_method).Updates(&newPayMethod).Error; err != nil {
-		return payment_method, err
+func (ur *PaymentMethodRepository) Update(UpdatedPaymentMethod pay.PaymentMethods) (pay.PaymentMethods, error) {
+	res := ur.db.Model(&UpdatedPaymentMethod).Update("name", UpdatedPaymentMethod.Name)
+	if res.RowsAffected == 0 {
+		return UpdatedPaymentMethod, errors.New("tidak ada pemutakhiran pada payment method")
 	}
-
-	return payment_method, nil
+	ur.db.First(&UpdatedPaymentMethod)
+	return UpdatedPaymentMethod, nil
 }
 
 // ======================== Delete Payment Method ===============================
-func (ur *PaymentMethodRepository) Delete(payment_methodId int) error {
-
+func (ur *PaymentMethodRepository) Delete(ID int) error {
 	var payment_method pay.PaymentMethods
-
-	if err := ur.db.First(&payment_method, payment_methodId).Error; err != nil {
-		return err
+	res := ur.db.Delete(&payment_method, ID)
+	if res.RowsAffected == 0 {
+		return errors.New("tidak ada payment method yang dihapus")
 	}
-	ur.db.Delete(&payment_method, payment_methodId)
 	return nil
-
 }
 
 // ============================================================================

@@ -1,9 +1,9 @@
 package transaction
 
 import (
+	"errors"
 	t "group-project1/entities/transaction"
 
-	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -16,47 +16,40 @@ func New(db *gorm.DB) *TransactionRepository {
 }
 
 // ======================== Insert Transaction ===============================
-func (ur *TransactionRepository) Insert(newTransaction t.Transactions) (t.Transactions, error) {
-	if err := ur.db.Save(&newTransaction).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return newTransaction, err
+func (ur *TransactionRepository) Insert(NewTransaction t.Transactions) (t.Transactions, error) {
+	if err := ur.db.Create(&NewTransaction).Error; err != nil {
+		return NewTransaction, err
 	}
-
-	return newTransaction, nil
+	return NewTransaction, nil
 }
 
 // ======================== Get Transactions ==================================
 func (ur *TransactionRepository) Get() ([]t.Transactions, error) {
 	transactions := []t.Transactions{}
-	if err := ur.db.Find(&transactions).Error; err != nil {
-		log.Warn("Found database error:", err)
-		return nil, err
+	ur.db.Find(&transactions)
+	if len(transactions) < 1 {
+		return nil, errors.New("belum ada tranasaksi yang terdaftar")
 	}
 	return transactions, nil
 }
 
 // ======================== Update Transaction ==============================
-func (ur *TransactionRepository) Update(transactionId int, newTransaction t.Transactions) (t.Transactions, error) {
-
-	var transaction t.Transactions
-	ur.db.First(&transaction, transactionId)
-
-	if err := ur.db.Model(&transaction).Updates(&newTransaction).Error; err != nil {
-		return transaction, err
+func (ur *TransactionRepository) Update(UpdatedTransaction t.Transactions) (t.Transactions, error) {
+	res := ur.db.Model(&UpdatedTransaction).Updates(UpdatedTransaction)
+	if res.RowsAffected == 0 {
+		return UpdatedTransaction, errors.New("tidak ada pemutakhiran pada data transaksi")
 	}
-
-	return transaction, nil
+	ur.db.First(&UpdatedTransaction)
+	return UpdatedTransaction, nil
 }
 
 // ======================== Delete Transaction ==============================
-func (ur *TransactionRepository) Delete(transactionId int) error {
-
+func (ur *TransactionRepository) Delete(ID int) error {
 	var transaction t.Transactions
-
-	if err := ur.db.First(&transaction, transactionId).Error; err != nil {
-		return err
+	res := ur.db.Delete(&transaction, ID)
+	if res.RowsAffected == 0 {
+		return errors.New("tidak ada user yang dihapus")
 	}
-	ur.db.Delete(&transaction, transactionId)
 	return nil
 
 }

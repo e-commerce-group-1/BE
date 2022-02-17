@@ -8,6 +8,6 @@ import (
 
 type ProductCategories struct {
 	gorm.Model
-	Name    string             `gorm:"type:varchar(255)"`
+	Name    string             `gorm:"type:varchar(255);unique;not null"`
 	Product []product.Products `gorm:"foreignKey:ProductCategoryID"`
 }

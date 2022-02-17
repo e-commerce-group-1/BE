@@ -11,6 +11,6 @@ type Transactions struct {
 	TotalQty          int `gorm:"type:int(11)"`
 	TotalPrice        int `gorm:"type:int(11)"`
 	UserID            uint
-	OrderID           uint
+	OrderID           uint                    `gorm:"foreignKey:TransactionID"`
 	TransactionDetail []td.TransactionDetails `gorm:"foreignKey:TransactionID"`
 }
