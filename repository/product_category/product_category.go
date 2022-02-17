@@ -35,7 +35,7 @@ func (ur *ProductCategoryRepository) Get() ([]pc.ProductCategories, error) {
 
 // ======================== Update Product Category ===============================
 func (ur *ProductCategoryRepository) Update(NewProductCategory pc.ProductCategories) (pc.ProductCategories, error) {
-	res := ur.db.Model(&NewProductCategory).Updates(NewProductCategory)
+	res := ur.db.Model(&NewProductCategory).Update("name", NewProductCategory.Name)
 	if res.RowsAffected == 0 {
 		return NewProductCategory, errors.New("tidak ada pemutakhiran pada kategori produk")
 	}
