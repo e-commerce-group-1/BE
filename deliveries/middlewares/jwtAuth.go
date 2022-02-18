@@ -33,3 +33,14 @@ func ExtractTokenUserId(e echo.Context) int {
 	}
 	return 0
 }
+
+func ExtractTokenIsAdmin(e echo.Context) bool {
+	user := e.Get("user").(*jwt.Token)
+	if user.Valid {
+		data := user.Claims.(jwt.MapClaims)
+		fmt.Println(data["isAdmin"])
+		isAdmin := data["isAdmin"].(bool)
+		return isAdmin
+	}
+	return false
+}

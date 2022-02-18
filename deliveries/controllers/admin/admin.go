@@ -2,6 +2,7 @@ package admin
 
 import (
 	"group-project1/deliveries/controllers/common"
+	"group-project1/deliveries/middlewares"
 	UserEntity "group-project1/entities/user"
 	"group-project1/repository/admin"
 	"net/http"
@@ -44,11 +45,15 @@ func (ac *AdminController) Insert() echo.HandlerFunc {
 
 func (uc *AdminController) Get() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		isAdmin := middlewares.ExtractTokenIsAdmin(c)
+		if !isAdmin {
+			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
+		}
+
 		res, err := uc.repo.Get()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-
 		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan semua user", ToAdminGetResponseFormat(res)))
 	}
 }
