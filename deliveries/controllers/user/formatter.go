@@ -20,8 +20,8 @@ type CreateUserResponseFormat struct {
 	Email    string `json:"email"`
 }
 
-func ToCreateUserRequestFormat(UserResponse user.Users) CreateUserRequestFormat {
-	return CreateUserRequestFormat{
+func ToCreateUserRequestFormat(UserResponse user.Users) CreateUserResponseFormat {
+	return CreateUserResponseFormat{
 		Name:     UserResponse.Name,
 		UserName: UserResponse.UserName,
 		Email:    UserResponse.Email,

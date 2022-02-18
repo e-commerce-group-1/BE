@@ -35,6 +35,6 @@ func (a *AuthController) Login() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusNotAcceptable, common.NotAcceptable())
 		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "successfully logged in, got new token", tokenID))
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "berhasil masuk, mendapatkan token baru", tokenID))
 	}
 }
