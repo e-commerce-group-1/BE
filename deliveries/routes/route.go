@@ -54,6 +54,6 @@ func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
 		Format: "method=${method}, uri=${uri}, status=${status}",
 	}))
 
-	e.POST("/addresses", ad.Insert())
-	e.GET("/addresses", ad.Get(), middlewares.JWTMiddleware())
+	e.POST("/admins", ad.Insert())
+	e.GET("/admins", ad.Get(), middlewares.JWTMiddleware())
 }
