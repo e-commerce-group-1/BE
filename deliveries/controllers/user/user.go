@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
 type UserController struct {
@@ -40,7 +39,7 @@ func (uc *UserController) Insert() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan user baru", res))
+		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan user baru", ToCreateUserRequestFormat(res)))
 	}
 }
 
@@ -65,18 +64,12 @@ func (uc *UserController) Update() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
 
-		res, err := uc.repo.Update(user.Users{
-			Model:    gorm.Model{ID: uint(UserID)},
-			Name:     UpdatedUser.Name,
-			UserName: UpdatedUser.UserName,
-			Email:    UpdatedUser.Email,
-			Password: UpdatedUser.Password,
-		})
+		res, err := uc.repo.Update(UpdatedUser.ToUpdateUserRequestFormat(uint(UserID)))
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses update user", res))
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses update user", ToUpdateUserResponseFormat(res)))
 	}
 }
 
