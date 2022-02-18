@@ -1,7 +1,7 @@
 package transaction
 
 import (
-	"group-project1/deliveries/controllers/auth"
+	"group-project1/deliveries/middlewares"
 	"group-project1/entities/transaction"
 	transactionRepo "group-project1/repository/transaction"
 	"net/http"
@@ -28,10 +28,10 @@ func (ac *TransactionController) Get() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, TransactionResponseFormat{
-			Code: 200,
+			Code:    200,
 			Success: true,
 			Message: "Success Get Transaction",
-			Data: res,
+			Data:    res,
 		})
 	}
 }
@@ -39,7 +39,7 @@ func (ac *TransactionController) Get() echo.HandlerFunc {
 func (ac *TransactionController) Insert() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		requestFormat := CreateTransactionRequestFormat{}
-		userId := int(auth.ExtractTokenUserId(c))
+		userId := int(middlewares.ExtractTokenUserId(c))
 
 		if err := c.Bind(&requestFormat); err != nil {
 			return c.JSON(http.StatusBadRequest, "Ada yang salah dengan input")
@@ -47,8 +47,8 @@ func (ac *TransactionController) Insert() echo.HandlerFunc {
 
 		res, err := ac.Repo.Insert(transaction.Transactions{
 			TotalPrice: requestFormat.TotalPrice,
-			TotalQty: requestFormat.TotalQty,
-			UserID: uint(userId),
+			TotalQty:   requestFormat.TotalQty,
+			UserID:     uint(userId),
 		})
 
 		if err != nil {
@@ -56,10 +56,10 @@ func (ac *TransactionController) Insert() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, TransactionResponseFormat{
-			Code: 200,
+			Code:    200,
 			Success: true,
 			Message: "Success Create Transaction",
-			Data: res,
+			Data:    res,
 		})
 	}
 }
