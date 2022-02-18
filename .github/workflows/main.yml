@@ -15,4 +15,8 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        script: git clone https://github.com/e-commerce-group-1/BE.git
+        script: | 
+          if [ -d "BE" ] then
+            rm -rf "BE"
+          fi
+          git clone https://github.com/e-commerce-group-1/BE.git
