@@ -21,7 +21,7 @@ func New(repository admin.Admin) *AdminController {
 
 func (ac *AdminController) Insert() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		NewUser := CreateAdminRequestFormat{}
+		NewUser := AdminCreateRequestFormat{}
 
 		if err := c.Bind(&NewUser); err != nil || NewUser.Name == "" || NewUser.Email == "" || NewUser.Password == "" {
 			return c.JSON(http.StatusBadRequest, common.BadRequest())
@@ -38,6 +38,17 @@ func (ac *AdminController) Insert() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan admin baru", ToCreateAdminResponseFormat(res)))
+		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan admin baru", ToAdminCreateResponseFormat(res)))
+	}
+}
+
+func (uc *AdminController) Get() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		res, err := uc.repo.Get()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
+		}
+
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan semua user", ToAdminGetResponseFormat(res)))
 	}
 }

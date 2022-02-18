@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"errors"
 	"group-project1/entities/user"
 	"group-project1/repository/hash"
 
@@ -22,4 +23,14 @@ func (ur *AdminRepository) Insert(NewAdmin user.Users) (user.Users, error) {
 		return NewAdmin, err
 	}
 	return NewAdmin, nil
+}
+
+// ======================== Get All Users ==================================
+func (ur *AdminRepository) Get() ([]user.Users, error) {
+	users := []user.Users{}
+	ur.db.Find(&users)
+	if len(users) < 1 {
+		return nil, errors.New("belum ada user yang terdaftar")
+	}
+	return users, nil
 }
