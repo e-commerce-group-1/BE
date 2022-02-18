@@ -39,7 +39,7 @@ func (uc *UserController) Insert() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan user baru", ToCreateUserRequestFormat(res)))
+		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan user baru", ToCreateUserResponseFormat(res)))
 	}
 }
 
