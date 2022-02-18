@@ -2,6 +2,7 @@ package route
 
 import (
 	"group-project1/deliveries/controllers/address"
+	"group-project1/deliveries/controllers/admin"
 	"group-project1/deliveries/controllers/auth"
 	"group-project1/deliveries/controllers/user"
 	"group-project1/deliveries/middlewares"
@@ -10,7 +11,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func RegisterPath(e *echo.Echo, uc *user.UserController, ac *auth.AuthController, a *address.AddressController) {
+func RegisterUserPath(e *echo.Echo, uc *user.UserController) {
 	e.Use(middleware.CORS())
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -18,14 +19,41 @@ func RegisterPath(e *echo.Echo, uc *user.UserController, ac *auth.AuthController
 	}))
 
 	e.POST("/users", uc.Insert())
-	e.POST("/login", ac.Login())
 	e.PUT("/users", uc.Update(), middlewares.JWTMiddleware())
 	e.DELETE("/users", uc.Delete(), middlewares.JWTMiddleware())
+}
 
-	eAddress := e.Group("")
-	eAddress.Use(middlewares.JWTMiddleware())
-	eAddress.POST("/addresses", a.Insert())
-	eAddress.GET("/addresses", a.Get())
-	eAddress.PUT("/addresses", a.Update())
-	eAddress.DELETE("/addresses", a.Delete())
+func RegisterAuthPath(e *echo.Echo, ac *auth.AuthController) {
+	e.Use(middleware.CORS())
+	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "method=${method}, uri=${uri}, status=${status}",
+	}))
+
+	e.POST("/login", ac.Login())
+}
+
+func RegisterAddressPath(e *echo.Echo, a *address.AddressController) {
+	e.Use(middleware.CORS())
+	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "method=${method}, uri=${uri}, status=${status}",
+	}))
+
+	e.Use(middlewares.JWTMiddleware())
+	e.POST("/addresses", a.Insert())
+	e.GET("/addresses", a.Get())
+	e.PUT("/addresses", a.Update())
+	e.DELETE("/addresses", a.Delete())
+}
+
+func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
+	e.Use(middleware.CORS())
+	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "method=${method}, uri=${uri}, status=${status}",
+	}))
+
+	e.POST("/addresses", ad.Insert())
+	e.GET("/addresses", ad.Get(), middlewares.JWTMiddleware())
 }
