@@ -31,7 +31,8 @@ func (a *AuthController) Login() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
 
-		tokenID, err := middlewares.GenerateToken(checkedUser.ID)
+		isAdmin := checkedUser.IsAdmin
+		tokenID, err := middlewares.GenerateToken(checkedUser.ID, isAdmin)
 		if err != nil {
 			return c.JSON(http.StatusNotAcceptable, common.NotAcceptable())
 		}
