@@ -1,6 +1,8 @@
 configs/config.yaml
+openapi.yaml
 *.jpg
 *.png
 *.json
 go.mod
 go.sum
+*.out
