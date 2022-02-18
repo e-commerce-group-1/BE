@@ -1,22 +1,19 @@
 package configs
 
 import (
+	"fmt"
+	"os"
 	"sync"
-
-	"github.com/labstack/gommon/log"
-	"github.com/spf13/viper"
 )
 
 type AppConfig struct {
-	Port     int `yaml:"port"`
-	Database struct {
-		Driver   string `yaml:"driver"`
-		Name     string `yaml:"name"`
-		Address  string `yaml:"address"`
-		Port     int    `yaml:"port"`
-		Username string `yaml:"username"`
-		Password string `yaml:"password"`
-	}
+	Port     int    `yaml:"port"`
+	Driver   string `yaml:"driver"`
+	Name     string `yaml:"name"`
+	Address  string `yaml:"address"`
+	DB_Port  int    `yaml:"port"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
 }
 
 var lock = &sync.Mutex{}
@@ -33,29 +30,51 @@ func GetConfig() *AppConfig {
 	return appConfig
 }
 
+// func initConfig() *AppConfig {
+// 	var defaultConfig AppConfig
+// 	defaultConfig.Port = 8000
+// 	defaultConfig.Driver = "mysql"
+// 	defaultConfig.Name = "test"
+// 	defaultConfig.Address = "localhost"
+// 	defaultConfig.Port = 3306
+// 	defaultConfig.Username = "admin"
+// 	defaultConfig.Password = "admin"
+
+// 	viper.SetConfigType("yaml")
+// 	viper.SetConfigName("config")
+// 	viper.AddConfigPath("./configs/")
+// 	if err := viper.ReadInConfig(); err != nil {
+// 		log.Info("failed to open file")
+// 		return &defaultConfig
+// 	}
+
+// 	var finalConfig AppConfig
+// 	err := viper.Unmarshal(&finalConfig)
+// 	if err != nil {
+// 		log.Info("failed to extract external config, use default value")
+// 		return &defaultConfig
+// 	}
+// 	return &finalConfig
+// }
 func initConfig() *AppConfig {
 	var defaultConfig AppConfig
 	defaultConfig.Port = 8000
-	defaultConfig.Database.Driver = "mysql"
-	defaultConfig.Database.Name = "test"
-	defaultConfig.Database.Address = "localhost"
-	defaultConfig.Database.Port = 3306
-	defaultConfig.Database.Username = "admin"
-	defaultConfig.Database.Password = "admin"
+	defaultConfig.Driver = getEnv("DRIVER", "mysql")
+	defaultConfig.Name = getEnv("NAME", "test")
+	defaultConfig.Address = getEnv("ADDRESS", "localhost")
+	defaultConfig.Port = 3306
+	defaultConfig.Username = getEnv("USERNAME", "root")
+	defaultConfig.Password = getEnv("PASSWORD", "")
 
-	viper.SetConfigType("yaml")
-	viper.SetConfigName("config")
-	viper.AddConfigPath("./configs/")
-	if err := viper.ReadInConfig(); err != nil {
-		log.Info("failed to open file")
-		return &defaultConfig
-	}
+	fmt.Println(defaultConfig)
 
-	var finalConfig AppConfig
-	err := viper.Unmarshal(&finalConfig)
-	if err != nil {
-		log.Info("failed to extract external config, use default value")
-		return &defaultConfig
+	return &defaultConfig
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		fmt.Println(value)
+		return value
 	}
-	return &finalConfig
+	return fallback
 }
