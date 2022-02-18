@@ -2,6 +2,8 @@ package product_category
 
 import (
 	"group-project1/entities/product_category"
+
+	"gorm.io/gorm"
 )
 
 // =================== Create Product Category =======================
@@ -26,7 +28,8 @@ type UpdateProdCatRequestFormat struct {
 
 func (UURF UpdateProdCatRequestFormat) ToUpdateProdCatRequestFormat(ID uint) product_category.ProductCategories {
 	return product_category.ProductCategories{
-		Name: UURF.Name,
+		Model: gorm.Model{ID: ID},
+		Name:  UURF.Name,
 	}
 }
 
