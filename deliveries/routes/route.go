@@ -11,6 +11,7 @@ import (
 )
 
 func RegisterPath(e *echo.Echo, uc *user.UserController, ac *auth.AuthController, a *address.AddressController) {
+	e.Use(middleware.CORS())
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}",
