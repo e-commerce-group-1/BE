@@ -24,36 +24,19 @@ func RegisterUserPath(e *echo.Echo, uc *user.UserController) {
 }
 
 func RegisterAuthPath(e *echo.Echo, ac *auth.AuthController) {
-	e.Use(middleware.CORS())
-	e.Pre(middleware.RemoveTrailingSlash())
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "method=${method}, uri=${uri}, status=${status}",
-	}))
-
 	e.POST("/login", ac.Login())
 }
 
 func RegisterAddressPath(e *echo.Echo, a *address.AddressController) {
-	e.Use(middleware.CORS())
-	e.Pre(middleware.RemoveTrailingSlash())
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "method=${method}, uri=${uri}, status=${status}",
-	}))
-
-	e.Use(middlewares.JWTMiddleware())
-	e.POST("/addresses", a.Insert())
-	e.GET("/addresses", a.Get())
-	e.PUT("/addresses", a.Update())
-	e.DELETE("/addresses", a.Delete())
+	r := e.Group("jwt/")
+	r.Use(middlewares.JWTMiddleware())
+	r.POST("/addresses", a.Insert())
+	r.GET("/addresses", a.Get())
+	r.PUT("/addresses", a.Update())
+	r.DELETE("/addresses", a.Delete())
 }
 
 func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
-	e.Use(middleware.CORS())
-	e.Pre(middleware.RemoveTrailingSlash())
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "method=${method}, uri=${uri}, status=${status}",
-	}))
-
 	e.POST("/admins", ad.Insert())
 	e.GET("/admins", ad.Get(), middlewares.JWTMiddleware())
 }
