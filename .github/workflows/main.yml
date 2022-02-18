@@ -17,6 +17,9 @@ jobs:
         port: ${{ secrets.PORT }}
         script: | 
           if [ -d "BE" ]; then
+            docker-compose down --rmi all
             rm -rf "BE"
           fi
           git clone https://github.com/e-commerce-group-1/BE.git
+          cd BE
+          docker-compose up --build -d
