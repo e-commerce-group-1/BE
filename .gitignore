@@ -1,6 +1,6 @@
 configs/config.yaml
+openapi.yaml
 *.jpg
 *.json
-*.yaml
 *.png
 *.out
