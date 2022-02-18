@@ -1,7 +1,9 @@
 package auth
 
 import (
+	"errors"
 	u "group-project1/entities/user"
+	"group-project1/repository/hash"
 
 	"gorm.io/gorm"
 )
@@ -18,11 +20,13 @@ func New(db *gorm.DB) *AuthRepository {
 
 // =========================== Login =================================
 func (a *AuthRepository) Login(email, password string) (u.Users, error) {
-	loggedInUser := u.Users{Email: email, Password: password}
-	if err := a.db.Model(&u.Users{}).Where("email = ? AND password = ?", email, password).First(&loggedInUser).Error; err != nil {
-		return loggedInUser, err
+	var user u.Users
+	a.db.Model(&user).Where("email = ?", email).First(&user)
+	isMatched := hash.CheckPasswordHash(password, user.Password)
+	if !isMatched {
+		return u.Users{}, errors.New("email atau password tidak valid")
 	}
-	return loggedInUser, nil
+	return user, nil
 }
 
 // ===================================================================

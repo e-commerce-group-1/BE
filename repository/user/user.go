@@ -3,6 +3,7 @@ package user
 import (
 	"errors"
 	u "group-project1/entities/user"
+	"group-project1/repository/hash"
 
 	"gorm.io/gorm"
 )
@@ -17,6 +18,7 @@ func New(db *gorm.DB) *UserRepository {
 
 // ======================== User Register ==================================
 func (ur *UserRepository) Insert(newUser u.Users) (u.Users, error) {
+	newUser.Password, _ = hash.HashPassword(newUser.Password)
 	if err := ur.db.Create(&newUser).Error; err != nil {
 		return newUser, err
 	}
