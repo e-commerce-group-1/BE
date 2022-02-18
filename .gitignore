@@ -3,3 +3,4 @@ configs/config.yaml
 *.json
 *.yaml
 *.png
+*.out
