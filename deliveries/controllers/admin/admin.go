@@ -24,7 +24,7 @@ func (ac *AdminController) Insert() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		NewUser := AdminCreateRequestFormat{}
 
-		if err := c.Bind(&NewUser); err != nil || NewUser.Name == "" || NewUser.Email == "" || NewUser.Password == "" {
+		if err := c.Bind(&NewUser); err != nil || NewUser.Name == "" || NewUser.UserName == "" || NewUser.Email == "" || NewUser.Password == "" {
 			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
 
@@ -33,6 +33,7 @@ func (ac *AdminController) Insert() echo.HandlerFunc {
 			UserName: NewUser.UserName,
 			Email:    NewUser.Email,
 			Password: NewUser.Password,
+			IsAdmin:  true,
 		}
 		res, err := ac.repo.Insert(newUser)
 
