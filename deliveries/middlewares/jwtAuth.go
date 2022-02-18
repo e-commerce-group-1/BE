@@ -10,12 +10,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GenerateToken(ID uint) (string, error) {
+func GenerateToken(ID uint, isAdmin bool) (string, error) {
 	if ID < 1 {
 		return "", errors.New("user_id is not valid")
 	}
 	data := jwt.MapClaims{}
 	data["id"] = ID
+	data["isAdmin"] = isAdmin
 	data["expired"] = time.Now().Add(time.Hour * 1).Unix()
 	data["authorized"] = true
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, data)
