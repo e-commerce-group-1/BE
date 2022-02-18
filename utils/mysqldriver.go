@@ -19,12 +19,11 @@ import (
 )
 
 func InitDB(config *configs.AppConfig) *gorm.DB {
-
 	connectionString := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8&parseTime=True&loc=Local",
 		config.Username,
 		config.Password,
 		config.Address,
-		config.Port,
+		config.DB_Port,
 		config.Name,
 	)
 
