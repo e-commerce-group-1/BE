@@ -43,18 +43,6 @@ func (uc *UserController) Insert() echo.HandlerFunc {
 	}
 }
 
-func (uc *UserController) Get() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		// UserID := middlewares.ExtractTokenUserId(c)
-		res, err := uc.repo.Get()
-
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
-		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan semua user", res))
-	}
-}
-
 func (uc *UserController) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		UserID := middlewares.ExtractTokenUserId(c)

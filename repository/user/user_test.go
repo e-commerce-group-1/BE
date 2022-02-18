@@ -56,53 +56,53 @@ func TestInsert(t *testing.T) {
 	})
 }
 
-func TestGet(t *testing.T) {
-	config := configs.GetConfig()
-	db := utils.InitDB(config)
+// func TestGet(t *testing.T) {
+// 	config := configs.GetConfig()
+// 	db := utils.InitDB(config)
 
-	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
-		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
-		transaction_detail.TransactionDetails{},
-	)
-	db.AutoMigrate(&user.Users{})
+// 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
+// 		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
+// 		transaction_detail.TransactionDetails{},
+// 	)
+// 	db.AutoMigrate(&user.Users{})
 
-	repo := New(db)
+// 	repo := New(db)
 
-	t.Run("fail to get all user", func(t *testing.T) {
-		res, err := repo.Get()
-		assert.Nil(t, res)
-		assert.NotNil(t, err)
-	})
+// 	t.Run("fail to get all user", func(t *testing.T) {
+// 		res, err := repo.Get()
+// 		assert.Nil(t, res)
+// 		assert.NotNil(t, err)
+// 	})
 
-	t.Run("succeed to get all users", func(t *testing.T) {
-		mockUser := user.Users{
-			Name:     "Ucup",
-			UserName: "ucup",
-			Email:    "ucup@ucup.com",
-			Password: "ucup123",
-		}
-		mockUser2 := user.Users{
-			Name:     "Ucup2",
-			UserName: "ucup2",
-			Email:    "ucup2@ucup.com",
-			Password: "ucup123",
-		}
-		repo.Insert(mockUser)
-		repo.Insert(mockUser2)
+// 	t.Run("succeed to get all users", func(t *testing.T) {
+// 		mockUser := user.Users{
+// 			Name:     "Ucup",
+// 			UserName: "ucup",
+// 			Email:    "ucup@ucup.com",
+// 			Password: "ucup123",
+// 		}
+// 		mockUser2 := user.Users{
+// 			Name:     "Ucup2",
+// 			UserName: "ucup2",
+// 			Email:    "ucup2@ucup.com",
+// 			Password: "ucup123",
+// 		}
+// 		repo.Insert(mockUser)
+// 		repo.Insert(mockUser2)
 
-		res, err := repo.Get()
+// 		res, err := repo.Get()
 
-		assert.Nil(t, err)
-		assert.Equal(t, mockUser.Name, res[0].Name)
-		assert.Equal(t, mockUser2.Name, res[1].Name)
-		assert.Equal(t, mockUser.UserName, res[0].UserName)
-		assert.Equal(t, mockUser2.UserName, res[1].UserName)
-		assert.Equal(t, mockUser.Email, res[0].Email)
-		assert.Equal(t, mockUser2.Email, res[1].Email)
-		assert.Equal(t, mockUser.Password, res[0].Password)
-		assert.Equal(t, mockUser2.Password, res[1].Password)
-	})
-}
+// 		assert.Nil(t, err)
+// 		assert.Equal(t, mockUser.Name, res[0].Name)
+// 		assert.Equal(t, mockUser2.Name, res[1].Name)
+// 		assert.Equal(t, mockUser.UserName, res[0].UserName)
+// 		assert.Equal(t, mockUser2.UserName, res[1].UserName)
+// 		assert.Equal(t, mockUser.Email, res[0].Email)
+// 		assert.Equal(t, mockUser2.Email, res[1].Email)
+// 		assert.Equal(t, mockUser.Password, res[0].Password)
+// 		assert.Equal(t, mockUser2.Password, res[1].Password)
+// 	})
+// }
 
 func TestUpdate(t *testing.T) {
 	config := configs.GetConfig()

@@ -25,16 +25,6 @@ func (ur *UserRepository) Insert(newUser u.Users) (u.Users, error) {
 	return newUser, nil
 }
 
-// ======================== Get Users ==================================
-func (ur *UserRepository) Get() ([]u.Users, error) {
-	users := []u.Users{}
-	ur.db.Find(&users)
-	if len(users) < 1 {
-		return nil, errors.New("belum ada user yang terdaftar")
-	}
-	return users, nil
-}
-
 // ======================== Update User ==================================
 func (ur *UserRepository) Update(userUpdate u.Users) (u.Users, error) {
 	res := ur.db.Model(&userUpdate).Updates(userUpdate)

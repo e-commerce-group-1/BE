@@ -19,7 +19,6 @@ func RegisterPath(e *echo.Echo, uc *user.UserController, ac *auth.AuthController
 
 	e.POST("/users", uc.Insert())
 	e.POST("/login", ac.Login())
-	e.GET("/users", uc.Get(), middlewares.JWTMiddleware())
 	e.PUT("/users", uc.Update(), middlewares.JWTMiddleware())
 	e.DELETE("/users", uc.Delete(), middlewares.JWTMiddleware())
 
