@@ -2,15 +2,15 @@ package main
 
 import (
 	"group-project1/configs"
+	"group-project1/deliveries/controllers/address"
 	"group-project1/deliveries/controllers/auth"
 	"group-project1/deliveries/controllers/user"
-	"group-project1/deliveries/controllers/address"
-	"group-project1/deliveries/routes"
+	route "group-project1/deliveries/routes"
 	"group-project1/utils"
 
+	_addressRepo "group-project1/repository/address"
 	_authRepo "group-project1/repository/auth"
 	_userRepo "group-project1/repository/user"
-	_addressRepo "group-project1/repository/address"
 
 	"fmt"
 
