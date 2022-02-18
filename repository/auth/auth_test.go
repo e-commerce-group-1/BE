@@ -8,7 +8,6 @@ import (
 	"group-project1/entities/product"
 	"group-project1/entities/product_category"
 	"group-project1/entities/transaction"
-	"group-project1/entities/transaction_detail"
 	"group-project1/entities/user"
 	UserRepo "group-project1/repository/user"
 	"group-project1/utils"
@@ -22,7 +21,6 @@ func TestLogin(t *testing.T) {
 	db := utils.InitDB(config)
 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
 		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
-		transaction_detail.TransactionDetails{},
 	)
 	db.AutoMigrate(&address.Addresses{})
 

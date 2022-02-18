@@ -8,7 +8,6 @@ import (
 	"group-project1/entities/product"
 	"group-project1/entities/product_category"
 	"group-project1/entities/transaction"
-	"group-project1/entities/transaction_detail"
 	"group-project1/entities/user"
 	"group-project1/utils"
 	"testing"
@@ -23,7 +22,6 @@ func TestInsert(t *testing.T) {
 
 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
 		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
-		transaction_detail.TransactionDetails{},
 	)
 	db.AutoMigrate(&user.Users{})
 
@@ -62,7 +60,7 @@ func TestInsert(t *testing.T) {
 
 // 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
 // 		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
-// 		transaction_detail.TransactionDetails{},
+//
 // 	)
 // 	db.AutoMigrate(&user.Users{})
 
@@ -110,7 +108,6 @@ func TestUpdate(t *testing.T) {
 
 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
 		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
-		transaction_detail.TransactionDetails{},
 	)
 	db.AutoMigrate(&user.Users{})
 
@@ -165,7 +162,6 @@ func TestDelete(t *testing.T) {
 
 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
 		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
-		transaction_detail.TransactionDetails{},
 	)
 	db.AutoMigrate(&user.Users{})
 

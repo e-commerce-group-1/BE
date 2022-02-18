@@ -8,7 +8,6 @@ import (
 	"group-project1/entities/product"
 	p_ctg "group-project1/entities/product_category"
 	"group-project1/entities/transaction"
-	tr_detail "group-project1/entities/transaction_detail"
 	"group-project1/entities/user"
 
 	"fmt"
@@ -46,5 +45,4 @@ func InitMigrate(db *gorm.DB) {
 	db.AutoMigrate(pay.PaymentMethods{})
 	db.AutoMigrate(product.Products{})
 	db.AutoMigrate(p_ctg.ProductCategories{})
-	db.AutoMigrate(tr_detail.TransactionDetails{})
 }
