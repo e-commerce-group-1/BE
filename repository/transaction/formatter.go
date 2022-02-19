@@ -9,7 +9,7 @@ type TransactionResponseFormat struct {
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 	ProductID  uint      `json:"product_id"`
-	ProductQty uint      `json:"qty"`
+	ProductQty uint      `json:"product_qty"`
 	Name       string    `json:"name"`
 	Image      string    `json:"image"`
 	Qty        uint      `json:"qty"`
