@@ -1,6 +1,7 @@
 package address
 
 import (
+	"group-project1/deliveries/controllers/common"
 	"group-project1/deliveries/middlewares"
 	"group-project1/entities/address"
 	addressRepo "group-project1/repository/address"
@@ -19,96 +20,56 @@ func New(address addressRepo.Address) *AddressController {
 	}
 }
 
-func (ac *AddressController) Get() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		res, err := ac.Repo.Get()
-
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Gagal Menampilkan Data Alamat")
-		}
-
-		return c.JSON(http.StatusOK, GetAddressesResponseFormat{
-			Code:    200,
-			Success: true,
-			Message: "Success Get Addresses",
-			Data:    res,
-		})
-	}
-}
-
 func (ac *AddressController) Insert() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		requestFormat := CreateAddressRequestFormat{}
-		userId := int(middlewares.ExtractTokenUserId(c))
+		NewAddress := CreateAddressRequestFormat{}
+		UserID := uint(middlewares.ExtractTokenUserId(c))
 
-		if err := c.Bind(&requestFormat); err != nil {
-			return c.JSON(http.StatusBadRequest, "Ada yang salah dengan input")
+		if err := c.Bind(&NewAddress); err != nil {
+			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
 
 		res, err := ac.Repo.Insert(address.Addresses{
-			Street:   requestFormat.Street,
-			City:     requestFormat.City,
-			Province: requestFormat.Province,
-			ZipCode:  requestFormat.ZipCode,
-			UserID:   uint(userId),
+			Street:   NewAddress.Street,
+			City:     NewAddress.City,
+			Province: NewAddress.Province,
+			ZipCode:  NewAddress.ZipCode,
+			UserID:   UserID,
 		})
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Gagal Memasukkan Data Alamat")
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-
-		return c.JSON(http.StatusOK, CreateAddressResponseFormat{
-			Code:    200,
-			Success: true,
-			Message: "Success Create Address",
-			Data:    res,
-		})
+		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan alamat baru", ToCreateAddressResponseFormat(res)))
 	}
 }
 
 func (ac *AddressController) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var newAddress = UpdateAddressRequestFormat{}
+		UserID := middlewares.ExtractTokenUserId(c)
+		var UpdateAddress = UpdateAddressRequestFormat{}
 
-		if err := c.Bind(&newAddress); err != nil {
-			return c.JSON(http.StatusBadRequest, "Ada yang salah dengan input")
+		if err := c.Bind(&UpdateAddress); err != nil {
+			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
-		res, err := ac.Repo.Update(address.Addresses{
-			Street:   newAddress.Street,
-			City:     newAddress.City,
-			Province: newAddress.Province,
-			ZipCode:  newAddress.ZipCode,
-		})
+		res, err := ac.Repo.Update(UpdateAddress.ToUpdateAddressRequestFormat(uint(UserID)))
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Gagal Memperbaharui Data Alamat")
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-
-		return c.JSON(http.StatusOK, UpdateAddressResponseFormat{
-			Code:    200,
-			Success: true,
-			Message: "Success Update Address",
-			Data:    res,
-		})
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses update user", ToUpdateAddressResponseFormat(res)))
 	}
 }
 
 func (ac *AddressController) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		address := address.Addresses{}
-		addressId := int(address.ID)
+		UserID := middlewares.ExtractTokenUserId(c)
 
-		err := ac.Repo.Delete(addressId)
+		err := ac.Repo.Delete(UserID)
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Gagal Menghapus Alamat")
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-
-		return c.JSON(http.StatusOK, DeleteAddressResponseFormat{
-			Code:    200,
-			Success: true,
-			Message: "Success Delete Address",
-			Data:    address,
-		})
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses menghapus alamat", err))
 	}
 }

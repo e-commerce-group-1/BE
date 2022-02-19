@@ -31,7 +31,6 @@ func RegisterAddressPath(e *echo.Echo, a *address.AddressController) {
 	r := e.Group("jwt/")
 	r.Use(middlewares.JWTMiddleware())
 	r.POST("/addresses", a.Insert())
-	r.GET("/addresses", a.Get())
 	r.PUT("/addresses", a.Update())
 	r.DELETE("/addresses", a.Delete())
 }
