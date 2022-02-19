@@ -22,6 +22,10 @@ func New(repository product.ProductRepository) *ProductController {
 
 func (uc *ProductController) Insert() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		isAdmin := middlewares.ExtractTokenIsAdmin(c)
+		if !isAdmin {
+			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
+		}
 		NewProduct := CreateProductRequestFormat{}
 		ProductCategoryID, _ := strconv.Atoi(c.Param("id"))
 		if err := c.Bind(&NewProduct); err != nil || NewProduct.Name == "" {
