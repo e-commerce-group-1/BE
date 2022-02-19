@@ -1,6 +1,8 @@
 package product
 
 import (
+	"group-project1/entities/transaction"
+
 	"gorm.io/gorm"
 )
 
@@ -14,4 +16,5 @@ type Products struct {
 	Stock             uint   `gorm:"default:0"`
 	Image             string `gorm:"type:text"`
 	ProductCategoryID uint
+	Transaction       []transaction.Transactions `gorm:"foreignKey:ProductID"`
 }
