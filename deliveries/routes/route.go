@@ -4,6 +4,7 @@ import (
 	"group-project1/deliveries/controllers/address"
 	"group-project1/deliveries/controllers/admin"
 	"group-project1/deliveries/controllers/auth"
+	"group-project1/deliveries/controllers/product"
 	"group-project1/deliveries/controllers/user"
 	"group-project1/deliveries/middlewares"
 
@@ -39,4 +40,10 @@ func RegisterAddressPath(e *echo.Echo, a *address.AddressController) {
 func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
 	e.POST("/admins", ad.Insert())
 	e.GET("/admins", ad.Get(), middlewares.JWTMiddleware())
+}
+
+func RegisterProductPath(e *echo.Echo, pc *product.ProductController) {
+	e.POST("/products", pc.Insert())
+	e.PUT("/products", pc.Update())
+	e.DELETE("/products", pc.Delete())
 }
