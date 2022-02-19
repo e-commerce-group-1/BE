@@ -1,99 +1,56 @@
 package payment_method
 
 import (
-	"group-project1/deliveries/controllers/common"
-	"group-project1/deliveries/middlewares"
-	PMEntity "group-project1/entities/payment_method"
-	PM "group-project1/repository/payment_method"
-	"net/http"
-	"strconv"
+	PM "group-project1/entities/payment_method"
 
-	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
-type PMController struct {
-	repo PM.PaymentMethodRepository
+// =================== Create Payment Method =======================
+type CreatePMRequestFormat struct {
+	Name string `json:"name" form:"name"`
 }
 
-func New(repository PM.PaymentMethodRepository) *PMController {
-	return &PMController{
-		repo: repository,
+type CreatePMResponseFormat struct {
+	Name string `json:"name"`
+}
+
+func ToCreatePMResponseFormat(PMResponse PM.PaymentMethods) CreatePMResponseFormat {
+	return CreatePMResponseFormat{
+		Name: PMResponse.Name,
 	}
 }
 
-func (uc *PMController) Insert() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		isAdmin := middlewares.ExtractTokenIsAdmin(c)
-		if !isAdmin {
-			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
-		}
+// =================== Update PM =======================
+type UpdatePMRequestFormat struct {
+	Name string `json:"name" form:"name"`
+}
 
-		NewPM := CreatePMRequestFormat{}
-
-		if err := c.Bind(&NewPM); err != nil || NewPM.Name == "" {
-			return c.JSON(http.StatusBadRequest, common.BadRequest())
-		}
-
-		newPM := PMEntity.PaymentMethods{
-			Name: NewPM.Name,
-		}
-		res, err := uc.repo.Insert(newPM)
-
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
-		}
-		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan kategori payment method baru", ToCreatePMResponseFormat(res)))
+func (UURF UpdatePMRequestFormat) ToUpdatePMRequestFormat(ID uint) PM.PaymentMethods {
+	return PM.PaymentMethods{
+		Model: gorm.Model{ID: ID},
+		Name:  UURF.Name,
 	}
 }
 
-func (uc *PMController) Update() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		isAdmin := middlewares.ExtractTokenIsAdmin(c)
-		if !isAdmin {
-			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
-		}
-		PMID, _ := strconv.Atoi((c.Param("id")))
-		var UpdatedPM = UpdatePMRequestFormat{}
+type UpdatePMResponseFormat struct {
+	Name string `json:"name"`
+}
 
-		if err := c.Bind(&UpdatedPM); err != nil {
-			return c.JSON(http.StatusBadRequest, common.BadRequest())
-		}
-
-		res, err := uc.repo.Update(UpdatedPM.ToUpdatePMRequestFormat(uint(PMID)))
-
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
-		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses update payment method baru", ToUpdatePMResponseFormat(res)))
+func ToUpdatePMResponseFormat(PMResponse PM.PaymentMethods) UpdatePMResponseFormat {
+	return UpdatePMResponseFormat{
+		Name: PMResponse.Name,
 	}
 }
 
-func (uc *PMController) Get() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		isAdmin := middlewares.ExtractTokenIsAdmin(c)
-		if !isAdmin {
-			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
-		}
-
-		res, err := uc.repo.Get()
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
-		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan semua payment method", ToPMGetResponseFormat(res)))
-	}
+type PMGetResponseFormat struct {
+	Name string `json:"name"`
 }
 
-func (uc *PMController) Delete() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		isAdmin := middlewares.ExtractTokenIsAdmin(c)
-		if !isAdmin {
-			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
-		}
-		PMID, _ := strconv.Atoi((c.Param("id")))
-		err := uc.repo.Delete(PMID)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
-		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses menghapus payment method", err))
+func ToPMGetResponseFormat(PMResponses []PM.PaymentMethods) []PMGetResponseFormat {
+	PMGetResponses := make([]PMGetResponseFormat, len(PMResponses))
+	for i := 0; i < len(PMResponses); i++ {
+		PMGetResponses[i].Name = PMResponses[i].Name
 	}
+	return PMGetResponses
 }
