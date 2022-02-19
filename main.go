@@ -3,6 +3,7 @@ package main
 import (
 	"group-project1/configs"
 	"group-project1/deliveries/controllers/address"
+	"group-project1/deliveries/controllers/product"
 	"group-project1/deliveries/controllers/admin"
 	"group-project1/deliveries/controllers/auth"
 	"group-project1/deliveries/controllers/user"
@@ -13,6 +14,7 @@ import (
 	_adminRepo "group-project1/repository/admin"
 	_authRepo "group-project1/repository/auth"
 	_userRepo "group-project1/repository/user"
+	_productRepo "group-project1/repository/product"
 
 	"fmt"
 
@@ -32,6 +34,8 @@ func main() {
 	addressController := address.New(addressRepo)
 	adminRepo := _adminRepo.New(db)
 	adminController := admin.New(adminRepo)
+	productRepo := _productRepo.New(db)
+	productController := product.New(productRepo)
 
 	e := echo.New()
 
@@ -39,6 +43,7 @@ func main() {
 	route.RegisterAuthPath(e, authController)
 	route.RegisterAddressPath(e, addressController)
 	route.RegisterAdminPath(e, adminController)
+	route.RegisterProductPath(e, productController)
 
 	log.Fatal(e.Start(fmt.Sprintf(":%d", config.Port)))
 }
