@@ -1,65 +1,56 @@
 package transaction
 
-import (
-	"group-project1/deliveries/middlewares"
-	"group-project1/entities/transaction"
-	transactionRepo "group-project1/repository/transaction"
-	"net/http"
+// import (
+// 	"group-project1/deliveries/controllers/common"
+// 	"group-project1/deliveries/middlewares"
+// 	"group-project1/repository/product"
+// 	transactionRepo "group-project1/repository/transaction"
+// 	"net/http"
 
-	"github.com/labstack/echo/v4"
-)
+// 	"github.com/labstack/echo/v4"
+// )
 
-type TransactionController struct {
-	Repo transactionRepo.Transaction
-}
+// type TransactionController struct {
+// 	Repo     transactionRepo.Transaction
+// 	RepoProd product.Product
+// }
 
-func New(transaction transactionRepo.Transaction) *TransactionController {
-	return &TransactionController{
-		Repo: transaction,
-	}
-}
+// func New(repo transactionRepo.Transaction, repoProd product.Product) *TransactionController {
+// 	return &TransactionController{
+// 		Repo:     repo,
+// 		RepoProd: repoProd,
+// 	}
+// }
 
-func (ac *TransactionController) Get() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		res, err := ac.Repo.Get()
+// func (tc *TransactionController) Insert() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		UserID := uint(middlewares.ExtractTokenUserId(c))
 
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Gagal Menampilkan Data Transaction")
-		}
+// 		newTrx := CreateTransactionRequestFormat{}
+// 		if err := c.Bind(&newTrx); err != nil {
+// 			return c.JSON(http.StatusBadRequest, common.BadRequest())
+// 		}
 
-		return c.JSON(http.StatusOK, TransactionResponseFormat{
-			Code:    200,
-			Success: true,
-			Message: "Success Get Transaction",
-			Data:    res,
-		})
-	}
-}
+// 		_, err := tc.Repo.FindID(UserID, newTrx.ProductID)
 
-func (ac *TransactionController) Insert() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		requestFormat := CreateTransactionRequestFormat{}
-		userId := int(middlewares.ExtractTokenUserId(c))
+// 		if err != nil {
 
-		if err := c.Bind(&requestFormat); err != nil {
-			return c.JSON(http.StatusBadRequest, "Ada yang salah dengan input")
-		}
+// 		}
+// 	}
+// }
+// func (tc *TransactionController) Get() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		res, err := tc.Repo.Get()
 
-		res, err := ac.Repo.Insert(transaction.Transactions{
-			TotalPrice: requestFormat.TotalPrice,
-			TotalQty:   requestFormat.TotalQty,
-			UserID:     uint(userId),
-		})
+// 		if err != nil {
+// 			return c.JSON(http.StatusInternalServerError, "Gagal Menampilkan Data Transaction")
+// 		}
 
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Gagal Membuat Transaction")
-		}
-
-		return c.JSON(http.StatusOK, TransactionResponseFormat{
-			Code:    200,
-			Success: true,
-			Message: "Success Create Transaction",
-			Data:    res,
-		})
-	}
-}
+// 		return c.JSON(http.StatusOK, TransactionResponseFormat{
+// 			Code:    200,
+// 			Success: true,
+// 			Message: "Success Get Transaction",
+// 			Data:    res,
+// 		})
+// 	}
+// }

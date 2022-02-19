@@ -50,6 +50,17 @@ func (uc *ProductController) Get() echo.HandlerFunc {
 	}
 }
 
+func (uc *ProductController) GetByID() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ID, _ := strconv.Atoi(c.Param("id"))
+		res, err := uc.repo.GetByID(uint(ID))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
+		}
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan semua produk", ToProductGetByIDResponseFormat(res)))
+	}
+}
+
 func (uc *ProductController) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// isAdmin := middlewares.ExtractTokenIsAdmin(c)
@@ -68,7 +79,7 @@ func (uc *ProductController) Update() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses update produk", ToUpdateProductResponseFormat(res)))
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses update produk", ToProductGetByIDResponseFormat(res)))
 	}
 }
 
@@ -79,7 +90,7 @@ func (uc *ProductController) Delete() echo.HandlerFunc {
 		// 	return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
 		// }
 		ProductCategoryID, _ := strconv.Atoi(c.Param("id"))
-		err := uc.repo.Delete(ProductCategoryID)
+		err := uc.repo.Delete(uint(ProductCategoryID))
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}

@@ -33,6 +33,14 @@ func (ur *ProductRepository) Get() ([]p.Products, error) {
 	return products, nil
 }
 
+func (ur *ProductRepository) GetByID(ID uint) (p.Products, error) {
+	product := p.Products{}
+	if err := ur.db.Model(&product).Where("id = ?", ID).First(&product).Error; err != nil {
+		return product, errors.New("belum ada produk yang terdaftar")
+	}
+	return product, nil
+}
+
 // ======================== Update Product ===============================
 func (ur *ProductRepository) Update(UpdatedProduct p.Products) (p.Products, error) {
 	res := ur.db.Model(&UpdatedProduct).Updates(UpdatedProduct)
@@ -44,7 +52,7 @@ func (ur *ProductRepository) Update(UpdatedProduct p.Products) (p.Products, erro
 }
 
 // ======================== Delete Product ===============================
-func (ur *ProductRepository) Delete(ID int) error {
+func (ur *ProductRepository) Delete(ID uint) error {
 	var product p.Products
 	res := ur.db.Delete(&product, ID)
 	if res.RowsAffected == 0 {

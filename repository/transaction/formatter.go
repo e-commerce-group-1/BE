@@ -4,6 +4,12 @@ import (
 	"time"
 )
 
+type CreateTransactionRequestFormat struct {
+	ProductID uint `json:"product_id"`
+	Qty       uint `json:"qty"`
+	Price     uint `json:"price"`
+}
+
 type TransactionResponseFormat struct {
 	ID         uint      `json:"id"`
 	CreatedAt  time.Time `json:"created_at"`

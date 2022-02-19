@@ -5,6 +5,7 @@ import (
 	"group-project1/deliveries/controllers/admin"
 	"group-project1/deliveries/controllers/auth"
 	"group-project1/deliveries/controllers/product"
+	"group-project1/deliveries/controllers/product_category"
 	"group-project1/deliveries/controllers/user"
 	"group-project1/deliveries/middlewares"
 
@@ -32,8 +33,8 @@ func RegisterAddressPath(e *echo.Echo, a *address.AddressController) {
 	r := e.Group("jwt/")
 	r.Use(middlewares.JWTMiddleware())
 	r.POST("/addresses", a.Insert())
-	r.PUT("/addresses", a.Update())
-	r.DELETE("/addresses", a.Delete())
+	r.PUT("/addresses/:id", a.Update())
+	r.DELETE("/addresses/:id", a.Delete())
 }
 
 func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
@@ -42,7 +43,16 @@ func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
 }
 
 func RegisterProductPath(e *echo.Echo, pc *product.ProductController) {
-	e.POST("/products", pc.Insert())
-	e.PUT("/products", pc.Update())
-	e.DELETE("/products", pc.Delete())
+	e.POST("/products/:id", pc.Insert())
+	e.GET("/products", pc.Get())
+	e.GET("/products/:id", pc.GetByID())
+	e.PUT("/products/:id", pc.Update())
+	e.DELETE("/products/:id", pc.Delete())
+}
+
+func RegisterProductCatPath(e *echo.Echo, pc *product_category.ProdCatController) {
+	e.POST("/productcats", pc.Insert())
+	e.GET("/productcats", pc.Get())
+	e.PUT("/productcats/:id", pc.Update())
+	e.DELETE("/productcats/:id", pc.Delete())
 }

@@ -2,7 +2,6 @@ package product_category
 
 import (
 	"group-project1/deliveries/controllers/common"
-	"group-project1/deliveries/middlewares"
 	"group-project1/entities/product_category"
 	PC "group-project1/repository/product_category"
 	"net/http"
@@ -12,10 +11,10 @@ import (
 )
 
 type ProdCatController struct {
-	repo PC.ProductCategoryRepository
+	repo PC.Product_Category
 }
 
-func New(repository PC.ProductCategoryRepository) *ProdCatController {
+func New(repository PC.Product_Category) *ProdCatController {
 	return &ProdCatController{
 		repo: repository,
 	}
@@ -23,10 +22,10 @@ func New(repository PC.ProductCategoryRepository) *ProdCatController {
 
 func (uc *ProdCatController) Insert() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		isAdmin := middlewares.ExtractTokenIsAdmin(c)
-		if !isAdmin {
-			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
-		}
+		// isAdmin := middlewares.ExtractTokenIsAdmin(c)
+		// if !isAdmin {
+		// 	return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
+		// }
 
 		NewPC := CreateProdCatRequestFormat{}
 
@@ -48,10 +47,10 @@ func (uc *ProdCatController) Insert() echo.HandlerFunc {
 
 func (uc *ProdCatController) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		isAdmin := middlewares.ExtractTokenIsAdmin(c)
-		if !isAdmin {
-			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
-		}
+		// isAdmin := middlewares.ExtractTokenIsAdmin(c)
+		// if !isAdmin {
+		// 	return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
+		// }
 		ProdCatID, _ := strconv.Atoi((c.Param("id")))
 		var UpdatedPC = UpdateProdCatRequestFormat{}
 
@@ -70,11 +69,10 @@ func (uc *ProdCatController) Update() echo.HandlerFunc {
 
 func (uc *ProdCatController) Get() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		isAdmin := middlewares.ExtractTokenIsAdmin(c)
-		if !isAdmin {
-			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
-		}
-
+		// isAdmin := middlewares.ExtractTokenIsAdmin(c)
+		// if !isAdmin {
+		// 	return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
+		// }
 		res, err := uc.repo.Get()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
@@ -85,10 +83,10 @@ func (uc *ProdCatController) Get() echo.HandlerFunc {
 
 func (uc *ProdCatController) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		isAdmin := middlewares.ExtractTokenIsAdmin(c)
-		if !isAdmin {
-			return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
-		}
+		// isAdmin := middlewares.ExtractTokenIsAdmin(c)
+		// if !isAdmin {
+		// 	return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
+		// }
 		ProdCatID, _ := strconv.Atoi((c.Param("id")))
 		err := uc.repo.Delete(ProdCatID)
 		if err != nil {

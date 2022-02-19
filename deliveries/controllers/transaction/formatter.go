@@ -10,7 +10,7 @@ type CreateTransactionRequestFormat struct {
 type TransactionResponseFormat struct {
 	ID         uint   `json:"id"`
 	ProductID  uint   `json:"product_id"`
-	ProductQty uint   `json:"qty"`
+	ProductQty uint   `json:"product_qty"`
 	Name       string `json:"name"`
 	Image      string `json:"image"`
 	Qty        uint   `json:"qty"`

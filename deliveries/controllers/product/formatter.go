@@ -118,3 +118,15 @@ func ToProductGetResponseFormat(Responses []product.Products) []GetProductRespon
 	}
 	return GetResponses
 }
+
+func ToProductGetByIDResponseFormat(Response product.Products) GetProductResponseFormat {
+	return GetProductResponseFormat{
+		Name:        Response.Name,
+		Description: Response.Description,
+		Gender:      Response.Gender,
+		Size:        Response.Size,
+		Price:       Response.Price,
+		Stock:       Response.Stock,
+		Image:       Response.Image,
+	}
+}

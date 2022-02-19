@@ -2,6 +2,7 @@ package transaction
 
 import (
 	"errors"
+	"group-project1/entities/product"
 	t "group-project1/entities/transaction"
 	tr "group-project1/entities/transaction"
 
@@ -87,3 +88,128 @@ func (ur *TransactionRepository) FindID(ProductID uint, UserID uint) (uint, erro
 	}
 	return Trx.ID, nil
 }
+
+func (ur *TransactionRepository) InsertNew(UserID uint, NewTrx t.Transactions) (TransactionResponseFormat, error) {
+	ProductID := NewTrx.ProductID
+	TrxTemp := t.Transactions{}
+
+	isAvailable := ur.db.Model(TrxTemp).Where("product_id = ? AND user_id = ?", ProductID, UserID).Find(&TrxTemp)
+	if isAvailable.Error != nil {
+		return TransactionResponseFormat{}, isAvailable.Error
+	}
+
+	if isAvailable.RowsAffected != 0 {
+		res1, err1 := ur.GetByID(ProductID, UserID)
+		if err1 != nil {
+			return TransactionResponseFormat{}, err1
+		}
+
+		if _, err := ur.UpdateByID(ProductID, UserID, t.Transactions{Qty: NewTrx.Qty}); err != nil {
+			return TransactionResponseFormat{}, err
+		}
+
+		prod := &product.Products{}
+		res2 := ur.db.Model(&prod).Where("product_id = ?", ProductID).First(&prod)
+		if res2.Error != nil {
+			return TransactionResponseFormat{}, res2.Error
+		}
+
+		updateQty := ur.db.Model(&prod).Where("product_id = ?", ProductID).Update("qty", prod.Stock+(res1.Qty-NewTrx.Qty))
+		if updateQty.Error != nil {
+			return TransactionResponseFormat{}, updateQty.Error
+		}
+
+		res3, err3 := ur.GetByID(ProductID, UserID)
+		if err3 != nil {
+			return TransactionResponseFormat{}, err3
+		}
+		return res3, nil
+	}
+
+	NewTrx.ID = UserID
+	if _, err := ur.Insert(NewTrx); err != nil {
+		return TransactionResponseFormat{}, err
+	}
+
+	prod := &product.Products{}
+	res2 := ur.db.Model(&prod).Where("product_id = ?", ProductID).First(&prod)
+	if res2.Error != nil {
+		return TransactionResponseFormat{}, res2.Error
+	}
+
+	if res := ur.db.Model(&product.Products{}).Where("product_id = ?", ProductID).Update("qty", prod.Stock+(res1.Qty-NewTrx.Qty)); res.Error != nil {
+		return TransactionResponseFormat{}, res.Error
+	}
+
+	res3, err3 := ur.GetByID(ProductID, UserID)
+	if err3 != nil {
+		return TransactionResponseFormat{}, err3
+	}
+	final := TransactionResponseFormat{
+		ID:         res3.ID,
+		CreatedAt:  res3.CreatedAt,
+		UpdatedAt:  res3.UpdatedAt,
+		ProductID:  res3.ProductID,
+		ProductQty: res3.ProductQty,
+		Name:       res3.Name,
+		Image:      res3.Image,
+		Qty:        res3.Qty,
+		Price:      res3.Qty * res3.Price,
+		Status:     res3.Status,
+	}
+	return final, nil
+}
+
+// func (ur *TransactionRepository) DeleteNew(ProductID, UserID uint) (gorm.DeletedAt, error) {
+// 	Trx := t.Transactions{}
+
+// 	res1, err1 := ur.GetByID(ProductID, UserID)
+// 	if err1 != nil {
+// 		return Trx.DeletedAt, err1
+// 	}
+// 	res := ur.db.Model(&t.Transactions{}).Where("product_id = ? AND user_id = ?", ProductID, UserID).Delete(&Trx)
+
+// 	if res.RowsAffected == 0 {
+// 		return Trx.DeletedAt, errors.New(gorm.ErrRecordNotFound.Error())
+// 	}
+
+// 	res2, err2 := product.New(ur.db).GetById(int(ProductID))
+// 	if err2 != nil {
+// 		return Trx.DeletedAt, err2
+// 	}
+
+// 	if _, err := product.New(ur.db).UpdateByIdAll(int(ProductID), templates.ProductRequest{Qty: (res2.Qty + (int(res1.Qty)))}); err != nil {
+// 		return Trx.DeletedAt, err
+// 	}
+
+// 	return Trx.DeletedAt, nil
+// }
+
+// func (ur *TransactionRepository) UpdateNew(ProductID uint, UserID uint, upCart templates.CartRequest) (templates.CartResponse, error) {
+// 	res1, err1 := ur.GetById(ProductID, UserID)
+// 	if err1 != nil {
+// 		return templates.CartResponse{}, err1
+// 	}
+
+// 	if _, err := ur.UpdateById(ProductID, UserID, templates.CartRequest{Qty: upCart.Qty, Status: "order"}); err != nil {
+// 		return templates.CartResponse{}, err
+// 	}
+
+// 	res2, err2 := product.New(ur.db).GetById(int(ProductID))
+
+// 	if err2 != nil {
+// 		return templates.CartResponse{}, err2
+// 	}
+// 	if _, err := product.New(ur.db).UpdateByIdAll(int(ProductID), templates.ProductRequest{Qty: (res2.Qty + (int(res1.Qty) - int(upCart.Qty)))}); err != nil {
+// 		return templates.CartResponse{}, err
+// 	}
+
+// 	res3, err3 := ur.GetById(ProductID, UserID)
+// 	if err3 != nil {
+// 		return templates.CartResponse{}, err3
+// 	}
+
+// 	res3.PriceTotal = res3.Qty * uint(res3.Price)
+
+// 	return res3, nil
+// }
