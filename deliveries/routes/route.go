@@ -7,6 +7,10 @@ import (
 	"group-project1/deliveries/controllers/product"
 	"group-project1/deliveries/controllers/product_category"
 	"group-project1/deliveries/controllers/user"
+	"group-project1/deliveries/controllers/order"
+	"group-project1/deliveries/controllers/payment_method"
+	"group-project1/deliveries/controllers/transaction"
+
 	"group-project1/deliveries/middlewares"
 
 	"github.com/labstack/echo/v4"
@@ -55,4 +59,25 @@ func RegisterProductCatPath(e *echo.Echo, pc *product_category.ProdCatController
 	e.GET("/productcats", pc.Get())
 	e.PUT("/productcats/:id", pc.Update())
 	e.DELETE("/productcats/:id", pc.Delete())
+}
+
+func RegisterPayMethodPath(e *echo.Echo, pm *payment_method.PMController) {
+	e.POST("/paymentmethods", pm.Insert())
+	e.GET("/paymentmethods", pm.Get())
+	e.PUT("/paymentmethods/:id", pm.Update())
+	e.DELETE("/paymentmethods/:id", pm.Delete())
+}
+
+func RegisterOrderPath(e *echo.Echo, o *order.OrderController) {
+	e.POST("/orders", o.Insert())
+	e.GET("/orders", o.Get())
+	// e.PUT("/orders/:id", pm.Update())
+	// e.DELETE("/orders/:id", pm.Delete())
+}
+
+func RegisterTransactionPath(e *echo.Echo, tr *transaction.TransactionController) {
+	e.POST("/transactions", tr.Insert())
+	e.GET("/transactions", tr.Get())
+	e.PUT("/transactions/:id", tr.Update())
+	e.DELETE("/transactions/:id", tr.Delete())
 }

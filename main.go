@@ -8,6 +8,9 @@ import (
 	"group-project1/deliveries/controllers/product"
 	"group-project1/deliveries/controllers/product_category"
 	"group-project1/deliveries/controllers/user"
+	"group-project1/deliveries/controllers/order"
+	"group-project1/deliveries/controllers/payment_method"
+	"group-project1/deliveries/controllers/transaction"
 	route "group-project1/deliveries/routes"
 	"group-project1/utils"
 
@@ -17,6 +20,9 @@ import (
 	_productRepo "group-project1/repository/product"
 	_productCatRepo "group-project1/repository/product_category"
 	_userRepo "group-project1/repository/user"
+	_orderRepo "group-project1/repository/order"
+	_payRepo "group-project1/repository/payment_method"
+	_transactionRepo "group-project1/repository/transaction"
 
 	"fmt"
 
@@ -40,6 +46,13 @@ func main() {
 	productController := product.New(productRepo)
 	productCatRepo := _productCatRepo.New(db)
 	productCatController := product_category.New(productCatRepo)
+	orderRepo := _orderRepo.New(db)
+	orderController := order.New(orderRepo)
+	payMethodRepo := _payRepo.New(db)
+	payMethodController := payment_method.New(payMethodRepo)
+	transactionRepo := _transactionRepo.New(db)
+	transactionController := transaction.New(transactionRepo)
+
 	e := echo.New()
 
 	route.RegisterUserPath(e, userController)
@@ -48,6 +61,9 @@ func main() {
 	route.RegisterAdminPath(e, adminController)
 	route.RegisterProductPath(e, productController)
 	route.RegisterProductCatPath(e, productCatController)
-
+	route.RegisterOrderPath(e, orderController)
+	route.RegisterPayMethodPath(e, payMethodController)
+	route.RegisterTransactionPath(e, transactionController)
+	
 	log.Fatal(e.Start(fmt.Sprintf(":%d", config.Port)))
 }
