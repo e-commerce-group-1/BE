@@ -1,68 +1,22 @@
 package transaction
 
-import (
-	"errors"
-	t "group-project1/entities/transaction"
+// import (
+// 	"errors"
+// 	"group-project1/entities/product"
+// 	t "group-project1/entities/transaction"
+// 	tr "group-project1/entities/transaction"
 
-	"gorm.io/gorm"
-)
+// 	"gorm.io/gorm"
+// )
 
-type TransactionRepository struct {
-	db *gorm.DB
-}
+// type TransactionRepository struct {
+// 	db *gorm.DB
+// }
 
-func New(db *gorm.DB) *TransactionRepository {
-	return &TransactionRepository{db: db}
-}
+// func New(db *gorm.DB) *TransactionRepository {
+// 	return &TransactionRepository{db: db}
+// }
 
-// ======================== Insert Transaction ===============================
-func (ur *TransactionRepository) Insert(NewTransaction t.Transactions) (t.Transactions, error) {
-	if err := ur.db.Create(&NewTransaction).Error; err != nil {
-		return NewTransaction, err
-	}
-	return NewTransaction, nil
-}
-
-// ======================== Get Transactions ByID ==================================
-func (ur *TransactionRepository) GetByID(ProductID uint, UserID uint) (t.Transactions, error) {
-	trx := t.Transactions{}
-	res := ur.db.Model(&t.Transactions{}).Where("product_id = ? AND user_id = ?", ProductID, UserID).Find(&trx)
-	if res.Error != nil {
-		return trx, errors.New(gorm.ErrRecordNotFound.Error())
-	}
-	return trx, nil
-}
-
-func (ur *TransactionRepository) Get(UserID uint) ([]t.Transactions, error) {
-	trx := []t.Transactions{}
-	ur.db.Find(&trx)
-	if len(trx) == 0 {
-		return nil, errors.New("belum ada transaksi yang terdaftar")
-	}
-	return trx, nil
-}
-
-// ======================== Update Transaction ==============================
-func (ur *TransactionRepository) UpdateByID(ProductID uint, UserID uint, UpdatedTrx t.Transactions) (t.Transactions, error) {
-	
-	res := ur.db.Model(&UpdatedTrx).Where("product_id = ? AND user_id = ?", ProductID, UserID).Updates(UpdatedTrx)
-	if res.RowsAffected == 0{
-		return UpdatedTrx, errors.New("tidak ada pemutakhiran pada data transaksi")
-	}
-	ur.db.First(&UpdatedTrx)
-	return UpdatedTrx, nil
-}
-
-// ======================== Delete Transaction ==============================
-func (ur *TransactionRepository) DeleteByID(ProductID uint, UserID uint) error {
-	var transaction t.Transactions
-	res := ur.db.Model(&transaction).Where("product_id = ? AND user_id = ?", ProductID, UserID).Delete(&transaction)
-	if res.RowsAffected == 0 {
-		return errors.New("tidak ada user yang dihapus")
-	}
-	return nil
-}
-// ========================== comment ===========================
 // // ======================== Insert Transaction ===============================
 // func (ur *TransactionRepository) Insert(NewTransaction t.Transactions) (t.Transactions, error) {
 // 	if err := ur.db.Create(&NewTransaction).Error; err != nil {
@@ -205,57 +159,57 @@ func (ur *TransactionRepository) DeleteByID(ProductID uint, UserID uint) error {
 // 	}
 // 	return final, nil
 // }
-// ============================= comment ==========================
-// func (ur *TransactionRepository) DeleteNew(ProductID, UserID uint) (gorm.DeletedAt, error) {
-// 	Trx := t.Transactions{}
 
-// 	res1, err1 := ur.GetByID(ProductID, UserID)
-// 	if err1 != nil {
-// 		return Trx.DeletedAt, err1
-// 	}
-// 	res := ur.db.Model(&t.Transactions{}).Where("product_id = ? AND user_id = ?", ProductID, UserID).Delete(&Trx)
+// // func (ur *TransactionRepository) DeleteNew(ProductID, UserID uint) (gorm.DeletedAt, error) {
+// // 	Trx := t.Transactions{}
 
-// 	if res.RowsAffected == 0 {
-// 		return Trx.DeletedAt, errors.New(gorm.ErrRecordNotFound.Error())
-// 	}
+// // 	res1, err1 := ur.GetByID(ProductID, UserID)
+// // 	if err1 != nil {
+// // 		return Trx.DeletedAt, err1
+// // 	}
+// // 	res := ur.db.Model(&t.Transactions{}).Where("product_id = ? AND user_id = ?", ProductID, UserID).Delete(&Trx)
 
-// 	res2, err2 := product.New(ur.db).GetById(int(ProductID))
-// 	if err2 != nil {
-// 		return Trx.DeletedAt, err2
-// 	}
+// // 	if res.RowsAffected == 0 {
+// // 		return Trx.DeletedAt, errors.New(gorm.ErrRecordNotFound.Error())
+// // 	}
 
-// 	if _, err := product.New(ur.db).UpdateByIdAll(int(ProductID), templates.ProductRequest{Qty: (res2.Qty + (int(res1.Qty)))}); err != nil {
-// 		return Trx.DeletedAt, err
-// 	}
+// // 	res2, err2 := product.New(ur.db).GetById(int(ProductID))
+// // 	if err2 != nil {
+// // 		return Trx.DeletedAt, err2
+// // 	}
 
-// 	return Trx.DeletedAt, nil
-// }
+// // 	if _, err := product.New(ur.db).UpdateByIdAll(int(ProductID), templates.ProductRequest{Qty: (res2.Qty + (int(res1.Qty)))}); err != nil {
+// // 		return Trx.DeletedAt, err
+// // 	}
 
-// func (ur *TransactionRepository) UpdateNew(ProductID uint, UserID uint, upCart templates.CartRequest) (templates.CartResponse, error) {
-// 	res1, err1 := ur.GetById(ProductID, UserID)
-// 	if err1 != nil {
-// 		return templates.CartResponse{}, err1
-// 	}
+// // 	return Trx.DeletedAt, nil
+// // }
 
-// 	if _, err := ur.UpdateById(ProductID, UserID, templates.CartRequest{Qty: upCart.Qty, Status: "order"}); err != nil {
-// 		return templates.CartResponse{}, err
-// 	}
+// // func (ur *TransactionRepository) UpdateNew(ProductID uint, UserID uint, upCart templates.CartRequest) (templates.CartResponse, error) {
+// // 	res1, err1 := ur.GetById(ProductID, UserID)
+// // 	if err1 != nil {
+// // 		return templates.CartResponse{}, err1
+// // 	}
 
-// 	res2, err2 := product.New(ur.db).GetById(int(ProductID))
+// // 	if _, err := ur.UpdateById(ProductID, UserID, templates.CartRequest{Qty: upCart.Qty, Status: "order"}); err != nil {
+// // 		return templates.CartResponse{}, err
+// // 	}
 
-// 	if err2 != nil {
-// 		return templates.CartResponse{}, err2
-// 	}
-// 	if _, err := product.New(ur.db).UpdateByIdAll(int(ProductID), templates.ProductRequest{Qty: (res2.Qty + (int(res1.Qty) - int(upCart.Qty)))}); err != nil {
-// 		return templates.CartResponse{}, err
-// 	}
+// // 	res2, err2 := product.New(ur.db).GetById(int(ProductID))
 
-// 	res3, err3 := ur.GetById(ProductID, UserID)
-// 	if err3 != nil {
-// 		return templates.CartResponse{}, err3
-// 	}
+// // 	if err2 != nil {
+// // 		return templates.CartResponse{}, err2
+// // 	}
+// // 	if _, err := product.New(ur.db).UpdateByIdAll(int(ProductID), templates.ProductRequest{Qty: (res2.Qty + (int(res1.Qty) - int(upCart.Qty)))}); err != nil {
+// // 		return templates.CartResponse{}, err
+// // 	}
 
-// 	res3.PriceTotal = res3.Qty * uint(res3.Price)
+// // 	res3, err3 := ur.GetById(ProductID, UserID)
+// // 	if err3 != nil {
+// // 		return templates.CartResponse{}, err3
+// // 	}
 
-// 	return res3, nil
-// }
+// // 	res3.PriceTotal = res3.Qty * uint(res3.Price)
+
+// // 	return res3, nil
+// // }

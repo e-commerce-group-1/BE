@@ -6,7 +6,6 @@ import (
 	"group-project1/entities/order"
 	pay "group-project1/entities/payment_method"
 	"group-project1/entities/product"
-	p_ctg "group-project1/entities/product_category"
 	"group-project1/entities/transaction"
 	"group-project1/entities/user"
 
@@ -44,5 +43,4 @@ func Drop(db *gorm.DB) {
 	db.Migrator().DropTable(order.Orders{})
 	db.Migrator().DropTable(pay.PaymentMethods{})
 	db.Migrator().DropTable(product.Products{})
-	db.Migrator().DropTable(p_ctg.ProductCategories{})
 }

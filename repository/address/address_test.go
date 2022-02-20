@@ -6,7 +6,6 @@ import (
 	"group-project1/entities/order"
 	"group-project1/entities/payment_method"
 	"group-project1/entities/product"
-	"group-project1/entities/product_category"
 	"group-project1/entities/transaction"
 	"group-project1/entities/user"
 	UserRepo "group-project1/repository/user"
@@ -22,7 +21,7 @@ func TestInsert(t *testing.T) {
 	db := utils.InitDB(config)
 
 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
-		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
+		payment_method.PaymentMethods{}, product.Products{},
 	)
 	db.AutoMigrate(&address.Addresses{}, &user.Users{})
 
@@ -69,7 +68,7 @@ func TestGet(t *testing.T) {
 	db := utils.InitDB(config)
 
 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
-		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
+		payment_method.PaymentMethods{}, product.Products{},
 	)
 	db.AutoMigrate(&address.Addresses{})
 
@@ -130,7 +129,7 @@ func TestUpdate(t *testing.T) {
 	db := utils.InitDB(config)
 
 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
-		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
+		payment_method.PaymentMethods{}, product.Products{},
 	)
 	db.AutoMigrate(&address.Addresses{})
 
@@ -182,7 +181,7 @@ func TestDelete(t *testing.T) {
 	db := utils.InitDB(config)
 
 	db.Migrator().DropTable(user.Users{}, address.Addresses{}, transaction.Transactions{}, order.Orders{},
-		payment_method.PaymentMethods{}, product.Products{}, product_category.ProductCategories{},
+		payment_method.PaymentMethods{}, product.Products{},
 	)
 	db.AutoMigrate(&address.Addresses{})
 

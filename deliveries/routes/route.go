@@ -7,8 +7,6 @@ import (
 	"group-project1/deliveries/controllers/order"
 	"group-project1/deliveries/controllers/payment_method"
 	"group-project1/deliveries/controllers/product"
-	"group-project1/deliveries/controllers/product_category"
-	// "group-project1/deliveries/controllers/transaction"
 	"group-project1/deliveries/controllers/user"
 
 	"group-project1/deliveries/middlewares"
@@ -47,18 +45,11 @@ func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
 }
 
 func RegisterProductPath(e *echo.Echo, pc *product.ProductController) {
-	e.POST("/products/:id", pc.Insert())
+	e.POST("/products", pc.Insert())
 	e.GET("/products", pc.Get())
 	e.GET("/products/:id", pc.GetByID())
 	e.PUT("/products/:id", pc.Update())
 	e.DELETE("/products/:id", pc.Delete())
-}
-
-func RegisterProductCatPath(e *echo.Echo, pc *product_category.ProdCatController) {
-	e.POST("/productcats", pc.Insert())
-	e.GET("/productcats", pc.Get())
-	e.PUT("/productcats/:id", pc.Update())
-	e.DELETE("/productcats/:id", pc.Delete())
 }
 
 func RegisterPayMethodPath(e *echo.Echo, pm *payment_method.PMController) {
@@ -76,8 +67,8 @@ func RegisterOrderPath(e *echo.Echo, o *order.OrderController) {
 }
 
 // func RegisterTransactionPath(e *echo.Echo, tr *transaction.TransactionController) {
-// 	// e.POST("/transactions", tr.Insert())
-// 	// e.GET("/transactions", tr.Get())
-// 	// e.PUT("/transactions/:id", tr.Update())
-// 	// e.DELETE("/transactions/:id", tr.Delete())
+// 	e.POST("/transactions", tr.Insert())
+// 	e.GET("/transactions", tr.Get())
+// 	e.PUT("/transactions/:id", tr.Update())
+// 	e.DELETE("/transactions/:id", tr.Delete())
 // }

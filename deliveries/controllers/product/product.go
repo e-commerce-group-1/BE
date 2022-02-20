@@ -27,11 +27,11 @@ func (uc *ProductController) Insert() echo.HandlerFunc {
 		// 	return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
 		// }
 		NewProduct := CreateProductRequestFormat{}
-		ProductCategoryID, _ := strconv.Atoi(c.Param("id"))
+		// ProductCategoryID, _ := strconv.Atoi(c.Param("id"))
 		if err := c.Bind(&NewProduct); err != nil || NewProduct.Name == "" {
 			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
-		res, err := uc.repo.Insert(NewProduct.ToCreateProductEntity(uint(ProductCategoryID)))
+		res, err := uc.repo.Insert(NewProduct.ToCreateProductEntity())
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
@@ -57,7 +57,7 @@ func (uc *ProductController) GetByID() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan semua produk", ToProductGetByIDResponseFormat(res)))
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan produk berdasarkan ID", ToProductGetByIDResponseFormat(res)))
 	}
 }
 
@@ -67,14 +67,14 @@ func (uc *ProductController) Update() echo.HandlerFunc {
 		// if !isAdmin {
 		// 	return c.JSON(http.StatusUnauthorized, common.UnAuthorized())
 		// }
-		ProductCategoryID, _ := strconv.Atoi(c.Param("id"))
+		// ProductCategoryID, _ := strconv.Atoi(c.Param("id"))
 		var UpdatedProduct = UpdateProductRequestFormat{}
 
 		if err := c.Bind(&UpdatedProduct); err != nil {
 			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
 
-		res, err := uc.repo.Update(UpdatedProduct.ToUpdateProductEntity(uint(ProductCategoryID)))
+		res, err := uc.repo.Update(UpdatedProduct.ToUpdateProductEntity())
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
