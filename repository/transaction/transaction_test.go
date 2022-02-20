@@ -1,4 +1,4 @@
-// package transaction
+package transaction
 
 // import (
 // 	"group-project1/configs"
@@ -202,4 +202,4 @@
 // 		assert.Nil(t, err)
 // 	})
 // }
-// 
+//

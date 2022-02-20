@@ -1,4 +1,4 @@
-// package order
+package order
 
 // import (
 // 	"group-project1/configs"
