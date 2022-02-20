@@ -14,4 +14,5 @@ type Orders struct {
 	Transaction     []transaction.Transactions `gorm:"foreignKey:OrderID"`
 	Address         address.Addresses          `gorm:"foreignKey:OrderID"`
 	PaymentMethodID uint
+	UserID          uint
 }
