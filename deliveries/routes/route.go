@@ -18,7 +18,6 @@ import (
 
 func RegisterUserPath(e *echo.Echo, uc *user.UserController) {
 	e.Use(middleware.CORS())
-	e.Use(middleware.HTTPSRedirect())
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}",
@@ -30,13 +29,11 @@ func RegisterUserPath(e *echo.Echo, uc *user.UserController) {
 }
 
 func RegisterAuthPath(e *echo.Echo, ac *auth.AuthController) {
-	e.Use(middleware.CORS())
 	e.POST("/login", ac.Login())
 }
 
 func RegisterAddressPath(e *echo.Echo, a *address.AddressController) {
 	r := e.Group("jwt/")
-	r.Use(middleware.CORS())
 	r.Use(middlewares.JWTMiddleware())
 	r.POST("/addresses", a.Insert())
 	r.PUT("/addresses/:id", a.Update())
@@ -44,13 +41,11 @@ func RegisterAddressPath(e *echo.Echo, a *address.AddressController) {
 }
 
 func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
-	e.Use(middleware.CORS())
 	e.POST("/admins", ad.Insert())
 	e.GET("/admins", ad.Get(), middlewares.JWTMiddleware())
 }
 
 func RegisterProductPath(e *echo.Echo, pc *product.ProductController) {
-	e.Use(middleware.CORS())
 	e.POST("/products", pc.Insert(), middlewares.JWTMiddleware())
 	e.GET("/products", pc.Get())
 	e.GET("/products/:id", pc.GetByID())
@@ -59,7 +54,6 @@ func RegisterProductPath(e *echo.Echo, pc *product.ProductController) {
 }
 
 func RegisterPayMethodPath(e *echo.Echo, pm *payment_method.PMController) {
-	e.Use(middleware.CORS())
 	e.POST("/paymentmethods", pm.Insert(), middlewares.JWTMiddleware())
 	e.GET("/paymentmethods", pm.Get(), middlewares.JWTMiddleware())
 	e.PUT("/paymentmethods/:id", pm.Update(), middlewares.JWTMiddleware())
@@ -67,7 +61,6 @@ func RegisterPayMethodPath(e *echo.Echo, pm *payment_method.PMController) {
 }
 
 func RegisterOrderPath(e *echo.Echo, o *order.OrderController) {
-	e.Use(middleware.CORS())
 	e.POST("/orders", o.Insert(), middlewares.JWTMiddleware())
 	e.GET("/orders/getuserbyid", o.GetByUserID(), middlewares.JWTMiddleware())
 	e.GET("/orders/setpayed/:id", o.SetPayed(), middlewares.JWTMiddleware())
@@ -76,7 +69,6 @@ func RegisterOrderPath(e *echo.Echo, o *order.OrderController) {
 }
 
 func RegisterTransactionPath(e *echo.Echo, tr *transaction.TransactionController) {
-	e.Use(middleware.CORS())
 	e.POST("/transactions", tr.Insert(), middlewares.JWTMiddleware())
 	e.GET("/transactions", tr.GetAllTrxByUserID(), middlewares.JWTMiddleware())
 	e.GET("/transactions/:id", tr.FindID(), middlewares.JWTMiddleware())
