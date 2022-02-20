@@ -72,7 +72,7 @@ func (ur *TransactionRepository) GetAllTrxByUserID(UserID uint) ([]t.Transaction
 	return trx, nil
 }
 
-func (ur *TransactionRepository) DeleteByID(ProductID uint, UserID uint) error {
+func (ur *TransactionRepository) DeleteByID(ProductID, UserID uint) error {
 	var trx t.Transactions
 	res := ur.db.Model(&trx).Where("product_id = ? AND user_id = ?", ProductID, UserID).Delete(&trx)
 	if res.RowsAffected == 0 {
