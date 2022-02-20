@@ -908,13 +908,13 @@ paths:
                   message: User tidak terautorisasi
                   data:
     delete:
-      summary: Hapus sebuah transaksi
+      summary: Hapus sebuah transaksi berdasarkan UserID, Produk ID, dan Size
       tags:
         - Transactions
       parameters:
         - name: id
           in: path
-          description: ID transaksi hasil generate sistem
+          description: Produk ID transaksi hasil generate sistem
           required: true
           schema:
             type: integer
@@ -927,12 +927,17 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/SuccessSingleResponse'
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: object
               example:
                 code: 200
-                success: true
-                message: Berhasil hapus data transaksi
-                data: {}
+                message: sukses menghapus data transaksi
+                data:
   /orders:
     post:
       summary: Tambah order baru

@@ -75,9 +75,9 @@ func (ur *TransactionRepository) GetAllTrxByUserID(UserID uint) ([]t.Transaction
 	return trx, nil
 }
 
-func (ur *TransactionRepository) DeleteByID(ProductID, UserID uint) error {
+func (ur *TransactionRepository) DeleteByID(ProductID, UserID uint, Size string) error {
 	var trx t.Transactions
-	res := ur.db.Model(&trx).Where("product_id = ? AND user_id = ?", ProductID, UserID).Delete(&trx)
+	res := ur.db.Model(&trx).Where("product_id = ? AND user_id = ? AND size = ?", ProductID, UserID, Size).Delete(&trx)
 	if res.RowsAffected == 0 {
 		return errors.New("tidak ada transaksi yang dihapus")
 	}

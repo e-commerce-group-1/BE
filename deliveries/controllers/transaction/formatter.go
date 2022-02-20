@@ -60,6 +60,6 @@ type UpdateTransactionRequestFormat struct {
 	TotalPrice int `json:"total_price"`
 }
 
-type FindIDReq struct {
+type Size struct {
 	Size string `json:"size"`
 }

@@ -52,11 +52,15 @@ func (tc *TransactionController) DeleteByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		UserID := middlewares.ExtractTokenUserId(c)
 		ProductID, _ := strconv.Atoi(c.Param("id"))
-		err := tc.Repo.DeleteByID(uint(ProductID), uint(UserID))
+		size := Size{}
+		if err := c.Bind(&size); err != nil || size.Size == "" {
+			return c.JSON(http.StatusBadRequest, common.BadRequest())
+		}
+		err := tc.Repo.DeleteByID(uint(ProductID), uint(UserID), size.Size)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan semua transaksi berdasarkan UserID", err))
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses menghapus data transaksi", err))
 	}
 }
 
@@ -64,7 +68,7 @@ func (tc *TransactionController) FindID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		UserID := middlewares.ExtractTokenUserId(c)
 		ProductID, _ := strconv.Atoi(c.Param("id"))
-		size := FindIDReq{}
+		size := Size{}
 		if err := c.Bind(&size); err != nil || size.Size == "" {
 			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
