@@ -18,7 +18,7 @@ import (
 
 func RegisterUserPath(e *echo.Echo, uc *user.UserController) {
 	e.Use(middleware.CORS())
-	// e.Use(middleware.HTTPSRedirect())
+	e.Use(middleware.HTTPSRedirect())
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}",
