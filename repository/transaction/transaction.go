@@ -65,7 +65,7 @@ func (ur *TransactionRepository) Insert(NewTransaction t.Transactions) (t.Transa
 // ======================== Get Transactions ByID ==================================
 func (ur *TransactionRepository) GetAllTrxByUserID(UserID uint) ([]t.Transactions, error) {
 	trx := []t.Transactions{}
-	res := ur.db.Model(&t.Transactions{}).Where("user_id = ?", UserID).Find(&trx)
+	res := ur.db.Model(&t.Transactions{}).Where("user_id = ? AND status = ?", UserID, "cart").Find(&trx)
 	if res.Error != nil {
 		return trx, errors.New(gorm.ErrRecordNotFound.Error())
 	}
