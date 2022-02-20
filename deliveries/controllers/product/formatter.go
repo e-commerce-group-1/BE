@@ -14,17 +14,16 @@ type CreateProductRequestFormat struct {
 	Image       string `json:"image" form:"image"`
 }
 
-func (CPRF CreateProductRequestFormat) ToCreateProductEntity(ProductCategoryID uint) product.Products {
+func (CPRF CreateProductRequestFormat) ToCreateProductEntity() product.Products {
 	return product.Products{
-		Name:              CPRF.Name,
-		Category:          CPRF.Category,
-		Description:       CPRF.Description,
-		Gender:            CPRF.Gender,
-		Size:              CPRF.Size,
-		Price:             CPRF.Price,
-		Stock:             CPRF.Stock,
-		Image:             CPRF.Image,
-		ProductCategoryID: ProductCategoryID,
+		Name:        CPRF.Name,
+		Category:    CPRF.Category,
+		Description: CPRF.Description,
+		Gender:      CPRF.Gender,
+		Size:        CPRF.Size,
+		Price:       CPRF.Price,
+		Stock:       CPRF.Stock,
+		Image:       CPRF.Image,
 	}
 }
 
@@ -66,17 +65,16 @@ type UpdateProductRequestFormat struct {
 	Image       string `json:"image" form:"image"`
 }
 
-func (UPRF UpdateProductRequestFormat) ToUpdateProductEntity(ProductCategoryID uint) product.Products {
+func (UPRF UpdateProductRequestFormat) ToUpdateProductEntity() product.Products {
 	return product.Products{
-		Name:              UPRF.Name,
-		Category:          UPRF.Category,
-		Description:       UPRF.Description,
-		Gender:            UPRF.Gender,
-		Size:              UPRF.Size,
-		Price:             UPRF.Price,
-		Stock:             UPRF.Stock,
-		Image:             UPRF.Image,
-		ProductCategoryID: ProductCategoryID,
+		Name:        UPRF.Name,
+		Category:    UPRF.Category,
+		Description: UPRF.Description,
+		Gender:      UPRF.Gender,
+		Size:        UPRF.Size,
+		Price:       UPRF.Price,
+		Stock:       UPRF.Stock,
+		Image:       UPRF.Image,
 	}
 }
 
@@ -121,6 +119,7 @@ type GetProductResponseFormat struct {
 func ToProductGetResponseFormat(Responses []product.Products) []GetProductResponseFormat {
 	GetResponses := make([]GetProductResponseFormat, len(Responses))
 	for i := 0; i < len(Responses); i++ {
+		GetResponses[i].ID = Responses[i].ID
 		GetResponses[i].Name = Responses[i].Name
 		GetResponses[i].Description = Responses[i].Description
 		GetResponses[i].Gender = Responses[i].Gender
