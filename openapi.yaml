@@ -5,7 +5,7 @@ info:
   contact:
     name: BE - Grup 1
     email: yusufnurwahid.contact@gmail.com
-  version: "2.0"
+  version: "2.1"
 servers:
   - url: http://3.1.211.120:8081/{entity}
     variables:
@@ -16,6 +16,7 @@ servers:
           - login
           - products
           - addresses
+          - transactions
 tags:
   - name: Auth
     description: Autorisasi users
@@ -964,19 +965,20 @@ paths:
               type: object
               properties:
                 transaction_id:
-                  type: integer
+                  type: array
+                  items:
+                    type: string
                 payment_method_id:
                   type: integer
                 phone:
                   type: string
-                status:
-                  type: string
-                  format: timestamp
               example:
-                transaction_id: 1
+                transaction_id:
+                  - '1'
+                  - '2'
+                  - '3'
                 payment_method_id: 1
                 phone: '081234445566'
-                status: 2022-0216T12:00:00Z
       security:
         - bearerAuth: []
       responses:
@@ -989,31 +991,34 @@ paths:
                 properties:
                   code:
                     type: integer
-                  success:
-                    type: boolean
                   message:
                     type: string
                   data:
                     type: object
                     properties:
                       transaction_id:
-                        type: integer
+                        type: array
+                        items:
+                          type: string
                       payment_method_id:
                         type: integer
                       phone:
                         type: string
                       status:
                         type: string
-                        format: timestamp
+                        enum:
+                          - cart
+                          - order
+                          - payed
+                          - cancel
                 example:
                   code: 200
-                  success: true
-                  message: Berhasil menambahkan order baru
+                  message: sukses menambahkan order baru
                   data:
-                    transaction_id: 1
+                    id: 1
                     payment_method_id: 1
                     phone: '081234445566'
-                    status: 2022-0216T12:00:00Z
+                    status: order
         '400':
           $ref: '#/components/responses/400'
     get:

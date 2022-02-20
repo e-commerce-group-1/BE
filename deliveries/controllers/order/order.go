@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 type OrderController struct {
@@ -28,6 +29,7 @@ func (oc *OrderController) Insert() echo.HandlerFunc {
 		if err := c.Bind(&NewOrder); err != nil {
 			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
+		log.Info(NewOrder)
 		res, err := oc.Repo.Insert(NewOrder.TransactionID, NewOrder.ToOrderEntity(uint(UserID)))
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())

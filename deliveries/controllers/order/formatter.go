@@ -8,7 +8,7 @@ import (
 
 // =================== Create Order =======================
 type CreateOrderRequestFormat struct {
-	PaymentMethodID uint     `json:"payment_method_id " form:"payment_method_id"`
+	PaymentMethodID uint     `json:"payment_method_id" form:"payment_method_id"`
 	TransactionID   []string `json:"transaction_id" form:"transaction_id"`
 	Phone           string   `json:"phone" form:"phone"`
 }
