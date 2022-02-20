@@ -8,6 +8,7 @@ import (
 	"group-project1/deliveries/controllers/payment_method"
 	"group-project1/deliveries/controllers/product"
 	"group-project1/deliveries/controllers/user"
+	"group-project1/deliveries/controllers/transaction"
 
 	"group-project1/deliveries/middlewares"
 
@@ -45,30 +46,31 @@ func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
 }
 
 func RegisterProductPath(e *echo.Echo, pc *product.ProductController) {
-	e.POST("/products", pc.Insert())
+	e.POST("/products", pc.Insert(), middlewares.JWTMiddleware())
 	e.GET("/products", pc.Get())
 	e.GET("/products/:id", pc.GetByID())
-	e.PUT("/products/:id", pc.Update())
-	e.DELETE("/products/:id", pc.Delete())
+	e.PUT("/products/:id", pc.Update(), middlewares.JWTMiddleware())
+	e.DELETE("/products/:id", pc.Delete(), middlewares.JWTMiddleware())
 }
 
 func RegisterPayMethodPath(e *echo.Echo, pm *payment_method.PMController) {
-	e.POST("/paymentmethods", pm.Insert())
-	e.GET("/paymentmethods", pm.Get())
-	e.PUT("/paymentmethods/:id", pm.Update())
-	e.DELETE("/paymentmethods/:id", pm.Delete())
+	e.POST("/paymentmethods", pm.Insert(), middlewares.JWTMiddleware())
+	e.GET("/paymentmethods", pm.Get(), middlewares.JWTMiddleware())
+	e.PUT("/paymentmethods/:id", pm.Update(), middlewares.JWTMiddleware())
+	e.DELETE("/paymentmethods/:id", pm.Delete(), middlewares.JWTMiddleware())
 }
 
 func RegisterOrderPath(e *echo.Echo, o *order.OrderController) {
-	e.POST("/orders", o.Insert())
-	e.GET("/orders", o.Get())
-	// e.PUT("/orders/:id", pm.Update())
-	// e.DELETE("/orders/:id", pm.Delete())
+	e.POST("/orders", o.Insert(), middlewares.JWTMiddleware())
+	e.GET("/orders", o.GetByUserID(), middlewares.JWTMiddleware())
+	e.GET("/orders/:id", o.SetPayed(), middlewares.JWTMiddleware())
+	e.GET("/orders/:id", o.SetCancel(), middlewares.JWTMiddleware())
+	e.GET("/orders", o.GetHistoryByUserID(), middlewares.JWTMiddleware())
 }
 
-// func RegisterTransactionPath(e *echo.Echo, tr *transaction.TransactionController) {
-// 	e.POST("/transactions", tr.Insert())
-// 	e.GET("/transactions", tr.Get())
-// 	e.PUT("/transactions/:id", tr.Update())
-// 	e.DELETE("/transactions/:id", tr.Delete())
-// }
+func RegisterTransactionPath(e *echo.Echo, tr *transaction.TransactionController) {
+	e.POST("/transactions", tr.Insert(), middlewares.JWTMiddleware())
+	e.GET("/transactions", tr.GetAllTrxByUserID(), middlewares.JWTMiddleware())
+	e.GET("/transactions/", tr.FindID(), middlewares.JWTMiddleware())
+	e.DELETE("/transactions/:id", tr.DeleteByID(), middlewares.JWTMiddleware())
+}
