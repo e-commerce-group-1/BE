@@ -7,13 +7,14 @@ info:
     email: yusufnurwahid.contact@gmail.com
   version: "2.0"
 servers:
-  - url: http://3.1.211.120:8081/{version}
+  - url: http://3.1.211.120:8081/{entity}
     variables:
-      version:
-        default: v1
+      entity:
+        default: users
         enum:
-          - v1
-          - v2
+          - users
+          - login
+          - products
 tags:
   - name: Auth
     description: Autorisasi users
@@ -30,7 +31,7 @@ tags:
   - name: Payment Methods
     description: Daftar payment methods
 paths:
-  /auth/login:
+  /login:
     post:
       tags:
         - Auth
@@ -123,29 +124,7 @@ paths:
                     user_name: frans1
                     email: frans@frans.com
         '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  message:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                      user_name:
-                        type: string
-                      email:
-                        type: string
-                example:
-                  code: 400
-                  message: input client tidak sesuai
-                  data:
+          $ref: '#/components/responses/400'
     # get:
     #   summary: Dapatkan semua detail user
     #   tags:
@@ -496,29 +475,30 @@ paths:
               properties:
                 name:
                   type: string
+                category:
+                  type: string
+                  enum: [Sneakers, Shirts, Pants, Accessories]
                 description:
                   type: string
                 gender:
                   type: boolean
                 size:
-                  type: integer
+                  type: string
                 price:
                   type: integer
                 stock:
                   type: integer
                 image:
-                  type: array
-                  items:
-                    type: string
+                  type: string
               example:
                 name: Adidas Air Max
+                category: Sneakers
                 description: Produknya bagus banget lo
-                gender: 1
-                size: 43
+                gender: true
+                size: '43'
                 price: 1500000
                 stock: 10
-                image:
-                  - https://www.nike.com/id/t/air-max-97-shoe-Ks2tvF/DJ2740-100 
+                image: https://www.nike.com/id/t/air-max-97-shoe-Ks2tvF/DJ2740-100 
       security:
         - bearerAuth: []
       responses:
@@ -531,8 +511,6 @@ paths:
                 properties:
                   code:
                     type: integer
-                  success:
-                    type: boolean
                   message:
                     type: string
                   data:
@@ -553,23 +531,19 @@ paths:
                       stock:
                         type: integer
                       image:
-                        type: array
-                        items:
-                          type: string
+                        type: string
                 example:
-                  code: 200
-                  success: true
-                  message: Berhasil menambahkan produk baru
+                  code: 201
+                  message: sukses menambahkan produk baru
                   data:
                     id: 1
                     name: Adidas Air Max
                     description: Produknya bagus banget lo
-                    gender: 1
-                    size: 43
+                    gender: true
+                    size: '43'
                     price: 1500000
                     stock: 10
-                    image:
-                      - https://www.nike.com/id/t/air-max-97-shoe-Ks2tvF/DJ2740-100
+                    image: https://www.nike.com/id/t/air-max-97-shoe-Ks2tvF/DJ2740-100
         '400':
           $ref: '#/components/responses/400'
     get:
@@ -610,32 +584,29 @@ paths:
                           stock:
                             type: integer
                           image:
-                            type: array
-                            items:
-                              type: string
+                            type: string
                 example:
                     code: 200
-                    success: true
-                    message: Berhasil mendapatkan semua produk
+                    message: sukses mendapatkan semua produk
                     data:
                       - id: 1
                         name: Adidas Air Max
+                        category: Sneakers
                         description: Produknya bagus banget lo
-                        gender: 1
-                        size: 43
+                        gender: true
+                        size: '43'
                         price: 1500000
                         stock: 10
-                        image:
-                          - https://www.nike.com/id/t/air-max-97-shoe-Ks2tvF/DJ2740-100
+                        image: https://www.nike.com/id/t/air-max-97-shoe-Ks2tvF/DJ2740-100
                       - id: 2
                         name: Nike Ultra Boost
+                        category: Sneakers
                         description: Produk kualitas impor
-                        gender: 1
-                        size: 41
+                        gender: true
+                        size: '41'
                         price: 2000000
                         stock: 3
-                        image:
-                          - https://www.adidas.co.id/media/catalog/product/g/x/gx5236_sl_ecom.jpg
+                        image: https://www.adidas.co.id/media/catalog/product/g/x/gx5236_sl_ecom.jpg
   /products/{id}:
     put:
       summary: Update data produk
@@ -702,18 +673,17 @@ paths:
                           type: string
                 example:
                   code: 200
-                  success: true
                   message: Berhasil mengupdate data produk
                   data:
                     id: 1
                     name: Adidas Air Max
+                    category: Sneakers
                     description: Produknya bagus banget lo
-                    gender: 1
-                    size: 43
+                    gender: true
+                    size: '43'
                     price: 1200000
                     stock: 13
-                    image:
-                      - https://www.nike.com/id/t/air-max-97-shoe-Ks2tvF/DJ2740-100
+                    image: https://www.nike.com/id/t/air-max-97-shoe-Ks2tvF/DJ2740-100
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -733,9 +703,8 @@ paths:
                     type: object
               example:
                   code: 401
-                  success: false
                   message: User tidak terautorisasi
-                  data: {}
+                  data:
     delete:
       summary: Hapus sebuah product
       tags:
@@ -756,12 +725,11 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/SuccessSingleResponse'
+                # $ref: '#/components/schemas/SuccessSingleResponse'
               example:
                 code: 200
-                success: true
-                message: Berhasil hapus data produk
-                data: {}
+                message: sukses menghapus produk
+                data:
   /transactions:
     post:
       summary: Tambah transaksi baru
@@ -1438,24 +1406,6 @@ components:
         data:
           $ref: '#/components/schemas/UserInput'
   responses:
-    '400':
-      description: Kesalahan dari client
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                example: 400
-              success:
-                type: boolean
-                example: false
-              message:
-                type: string
-                example: Terjadi kesalahan pada input
-              data:
-                type: object
     '204':
       description: Kesalahan update
       content:
@@ -1475,6 +1425,30 @@ components:
               data:
                 type: object
                 example: {}
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  user_name:
+                    type: string
+                  email:
+                    type: string
+            example:
+              code: 400
+              message: input client tidak sesuai
+              data:
     '401':
       description: Kesalahan autorisasi
       content:
