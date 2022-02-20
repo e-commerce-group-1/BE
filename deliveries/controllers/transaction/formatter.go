@@ -59,3 +59,7 @@ type UpdateTransactionRequestFormat struct {
 	TotalQty   int `json:"total_qty"`
 	TotalPrice int `json:"total_price"`
 }
+
+type FindIDReq struct {
+	Size string `json:"size"`
+}

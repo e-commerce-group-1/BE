@@ -64,7 +64,11 @@ func (tc *TransactionController) FindID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		UserID := middlewares.ExtractTokenUserId(c)
 		ProductID, _ := strconv.Atoi(c.Param("id"))
-		res, err := tc.Repo.FindID(uint(ProductID), uint(UserID))
+		size := FindIDReq{}
+		if err := c.Bind(&size); err != nil || size.Size == "" {
+			return c.JSON(http.StatusBadRequest, common.BadRequest())
+		}
+		res, err := tc.Repo.FindID(uint(ProductID), uint(UserID), size.Size)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}

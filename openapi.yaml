@@ -15,6 +15,7 @@ servers:
           - users
           - login
           - products
+          - addresses
 tags:
   - name: Auth
     description: Autorisasi users
@@ -187,39 +188,38 @@ paths:
     #                     created_at: 2022-02-15T05:19:20Z
     #                     updated_at: 2022-02-15T05:20:20Z
     #                     deleted_at: 2022-02-15T05:21:20Z
-    # put:
-    #   summary: Ubah record berdasarkan ID
-    #   tags:
-    #     - Users
-    #   requestBody:
-    #     required: true
-    #     content:
-    #       application/json:
-    #         schema:
-    #           type: object
-    #           $ref: '#/components/schemas/UserInput'
-    #         example:
-    #           name: Franz Ichsan
-    #           user_name: franz1
-    #   security:
-    #     - bearerAuth: []
-    #   responses:
-    #     '200':
-    #       description: OK
-    #       content:
-    #         application/json:
-    #           schema:
-    #             type: object
-    #             $ref: '#/components/schemas/SuccessSingleResponse'
-    #           example:
-    #             code: 200
-    #             success: true
-    #             message: Berhasil ubah data user
-    #             data:
-    #               name: Franz Ichsan
-    #               user_name: franz1
-    #     '204':
-    #       $ref: '#/components/responses/204'
+    put:
+      summary: Ubah record berdasarkan ID
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/UserInput'
+            example:
+              name: Franz Ichsan
+              user_name: franz1
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/SuccessSingleResponse'
+              example:
+                code: 200
+                message: berhasil mengubah data user
+                data:
+                  name: Franz Ichsan
+                  user_name: franz1
+        '204':
+          $ref: '#/components/responses/204'
     delete:
       tags:
         - Users
@@ -257,13 +257,10 @@ paths:
                   type: string
                 province:
                   type: string
-                zipcode:
-                  type: string
               example:
                 street: Jl. Diponegoro No. 12
                 city: Surabaya
                 province: Jawa Timur
-                zipcode: '666666'
       security:
         - bearerAuth: []
       responses:
@@ -291,8 +288,6 @@ paths:
                         type: string
                       province:
                         type: string
-                      zipcode:
-                        type: string
                 example:
                   code: 200
                   success: true
@@ -302,7 +297,6 @@ paths:
                     street: Jl. Diponegoro No. 12
                     city: Surabaya
                     province: Jawa Timur
-                    zipcode: '666666'
         '400':
           $ref: '#/components/responses/400'
     get:
@@ -338,8 +332,6 @@ paths:
                           type: string
                         province:
                           type: string
-                        zipcode:
-                          type: string
                   example:
                     code: 200
                     success: true
@@ -349,12 +341,10 @@ paths:
                         street: Jl. Diponegoro No. 12
                         city: Surabaya
                         province: Jawa Timur
-                        zipcode: '666666'
                       - id: 2
                         street: Jl. Jendral Soedirman
                         city: Semarang
                         province: Jawa Tengah
-                        zipcode: '666777'
     put:
       summary: Update data alamat
       tags:
@@ -373,13 +363,10 @@ paths:
                   type: string
                 province:
                   type: string
-                zipcode:
-                  type: string
               example:
                 street: Jl. Jendral Soedirman
                 city: Semarang
                 province: Jawa Tengah
-                zipcode: '666777'
       security:
         - bearerAuth: []
       responses:
@@ -407,8 +394,6 @@ paths:
                         type: string
                       province:
                         type: string
-                      zipcode:
-                        type: string
                 example:
                   code: 200
                   success: true
@@ -418,7 +403,6 @@ paths:
                     street: Jl. Jendral Soedirman
                     city: Semarang
                     province: Jawa Tengah
-                    zipcode: '666777'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -440,7 +424,7 @@ paths:
                   code: 401
                   success: false
                   message: User tidak terautorisasi
-                  data: {}
+                  data: 
     delete:
       summary: Hapus sebuah alamat
       tags:
@@ -459,7 +443,7 @@ paths:
                 code: 200
                 success: true
                 message: Berhasil hapus data alamat
-                data: {}
+                data: 
   /products:
     post:
       summary: Tambah produk baru
@@ -743,131 +727,16 @@ paths:
             schema:
               type: object
               properties:
-                user_id:
+                qty:
                   type: integer
-                total_qty:
-                  type: integer
-                total_price:
-                  type: integer
-              example:
-                user_id: 1
-                total_qty: 3
-                total_price: 4500000
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      user_id:
-                        type: integer
-                      total_qty:
-                        type: integer
-                      total_price:
-                        type: integer
-                example:
-                  code: 200
-                  success: true
-                  message: Berhasil menambahkan transaksi baru
-                  data:
-                    user_id: 1
-                    total_qty: 3
-                    total_price: 4500000
-        '400':
-          $ref: '#/components/responses/400'
-    get:
-      summary: Dapatkan seluruh transaksi
-      tags:
-        - Transactions
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    code:
-                      type: integer
-                    success:
-                      type: boolean
-                    message:
-                      type: string
-                    data:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        user_id:
-                          type: integer
-                        total_qty:
-                          type: integer
-                        total_price:
-                          type: integer
-                  example:
-                    - code: 200
-                      success: true
-                      message: Berhasil mendapatkan semua transaksi
-                      data:
-                        id: 1
-                        user_id: 1
-                        total_qty: 3
-                        total_price: 4500000
-                    - code: 200
-                      success: true
-                      message: Berhasil mendapatkan semua transaksi
-                      data:
-                        id: 2
-                        user_id: 2
-                        total_qty: 4
-                        total_price: 5000000
-  /transactions/{id}:  
-    put:
-      summary: Update data transaksi
-      tags:
-        - Transactions
-      parameters:
-        - name: id
-          in: path
-          description: ID transaksi hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        description: Mengubah data transaksi dengan input yang sesuai
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                user_id:
-                  type: integer
-                total_qty:
-                  type: integer
-                total_price:
+                size:
+                  type: string
+                product_id:
                   type: integer
               example:
-                  user_id: 2
-                  total_qty: 2
-                  total_price: 2500000
+                qty: 5
+                size: "4"
+                product_id: 1
       security:
         - bearerAuth: []
       responses:
@@ -889,21 +758,134 @@ paths:
                     properties:
                       id:
                         type: integer
+                      product_id:
+                        type: integer
                       user_id:
                         type: integer
-                      total_qty:
+                      size:
+                        type: string
+                      qty:
                         type: integer
-                      total_price:
-                        type: integer
+                      status:
+                        type: string
+                        enum:
+                          - cart
+                          - order
+                          - payed
+                          - cancel
                 example:
                   code: 200
-                  success: true
-                  message: Berhasil mengupdate data transaksi
+                  message: sukses menambahkan transaksi baru
                   data:
-                    id: 2
+                    id: 12
+                    product_id: 1
                     user_id: 2
-                    total_qty: 2
-                    total_price: 2500000
+                    size: '41'
+                    qty: 5
+                    status: 'cart'
+        '400':
+          $ref: '#/components/responses/400'
+    get:
+      summary: Dapatkan seluruh transaksi berdasarkan UserID dari JWT
+      tags:
+        - Transactions
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: integer
+                    message:
+                      type: string
+                    data:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        product_id:
+                          type: integer
+                        size:
+                          type: string
+                        qty:
+                          type: integer
+                        status:
+                          type: string
+                          enum:
+                            - cart
+                            - order
+                            - payed
+                            - cancel
+                  example:
+                    - code: 200
+                      message: sukses mendapatkan semua transaksi berdasarkan UserID
+                      data:
+                        id: 10
+                        product_id: 1
+                        user_id: 2
+                        size: '39'
+                        qty: 5
+                        status: 'cart'
+                    - code: 200
+                      message: sukses mendapatkan semua transaksi berdasarkan UserID
+                      data:
+                        id: 11
+                        product_id: 1
+                        user_id: 2
+                        size: '40'
+                        qty: 5
+                        status: 'cart'
+  /transactions/findid:  
+    get:
+      summary: Mencari ID dari transaksi
+      tags:
+        - Transactions
+      parameters:
+        - name: id
+          in: path
+          description: Product ID hasil generate sistem
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: Mencari ID transaksi berdasarkan UserID (jwt), Produk ID, dan size
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                size:
+                  type: string
+              example:
+                  size: '39'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: integer
+                example:
+                  code: 200
+                  message: sukses mendapatkan ID transaksi
+                  data: 10
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -923,9 +905,8 @@ paths:
                     type: object
               example:
                   code: 401
-                  success: false
                   message: User tidak terautorisasi
-                  data: {}
+                  data:
     delete:
       summary: Hapus sebuah transaksi
       tags:
@@ -1416,15 +1397,12 @@ components:
               code:
                 type: integer
                 example: 204
-              success:
-                type: boolean
-                example: false
               message:
                 type: string
                 example: Tidak ada data yang diupdate
               data:
                 type: object
-                example: {}
+                example: 
     '400':
       description: Bad request
       content:

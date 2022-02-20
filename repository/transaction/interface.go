@@ -6,5 +6,5 @@ type Transaction interface {
 	Insert(NewTransaction t.Transactions) (t.Transactions, error)
 	GetAllTrxByUserID(UserID uint) ([]t.Transactions, error)
 	DeleteByID(ProductID, UserID uint) error
-	FindID(ProductID, UserID uint) (uint, error)
+	FindID(ProductID, UserID uint, Size string) (uint, error)
 }

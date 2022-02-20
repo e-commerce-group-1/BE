@@ -71,6 +71,6 @@ func RegisterOrderPath(e *echo.Echo, o *order.OrderController) {
 func RegisterTransactionPath(e *echo.Echo, tr *transaction.TransactionController) {
 	e.POST("/transactions", tr.Insert(), middlewares.JWTMiddleware())
 	e.GET("/transactions", tr.GetAllTrxByUserID(), middlewares.JWTMiddleware())
-	e.GET("/transactions/findid", tr.FindID(), middlewares.JWTMiddleware())
+	e.GET("/transactions/:id", tr.FindID(), middlewares.JWTMiddleware())
 	e.DELETE("/transactions/:id", tr.DeleteByID(), middlewares.JWTMiddleware())
 }

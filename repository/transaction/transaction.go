@@ -84,9 +84,9 @@ func (ur *TransactionRepository) DeleteByID(ProductID, UserID uint) error {
 	return nil
 }
 
-func (ur *TransactionRepository) FindID(ProductID, UserID uint) (uint, error) {
+func (ur *TransactionRepository) FindID(ProductID, UserID uint, Size string) (uint, error) {
 	var trx t.Transactions
-	if err := ur.db.Model(&trx).Where("product_id = ? AND user_id = ?", ProductID, UserID).First(&trx).Error; err != nil {
+	if err := ur.db.Model(&trx).Where("product_id = ? AND user_id = ? AND size = ?", ProductID, UserID, Size).First(&trx).Error; err != nil {
 		return 0, errors.New(gorm.ErrRecordNotFound.Error())
 	}
 	return trx.ID, nil
