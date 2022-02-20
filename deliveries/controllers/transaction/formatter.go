@@ -13,7 +13,7 @@ type CreateTransactionRequestFormat struct {
 func (CTRF CreateTransactionRequestFormat) ToTransactionEntity(UserID uint) t.Transactions {
 	return t.Transactions{
 		ProductID: CTRF.ProductID,
-		UserID:    CTRF.UserID,
+		UserID:    UserID,
 		Size:      CTRF.Size,
 		Qty:       CTRF.Qty,
 	}

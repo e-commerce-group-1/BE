@@ -22,15 +22,17 @@ func (ur *TransactionRepository) Insert(NewTransaction t.Transactions) (t.Transa
 	Size := NewTransaction.Size
 	// Bill := SetBill{}
 	TrxAdded := t.Transactions{}
+	TrxFinal := t.Transactions{}
 	// if err := ur.db.Model(&t.Transactions{}).Select("transactions.id as ID, transactions.product_id as ProductID, transactions.user_id as UserID, transactions.qty as Qty, transactions.bill as Bill, products.price as Price").Joins("inner join products on products.id = transactions.product_id").Scan(&TrxAdded); err == nil {
 	// 	return TrxAdded, errors.New("produk sudah ditambahkan ke dalam keranjang")
 	// }
-	if err := ur.db.Where("product_id = ? AND user_id = ? AND size = ?", ProductID, UserID, Size).First(&TrxAdded).Error; err != nil {
+	if err := ur.db.Where("product_id = ? AND user_id = ? AND size = ? AND status = ?", ProductID, UserID, Size, "cart").First(&TrxAdded).Error; err != nil {
 		if NewTransaction.Qty == 0 {
 			NewTransaction.Qty = 1
 		}
 		if err := ur.db.Create(&NewTransaction).Error; err != nil {
-			return NewTransaction, err
+			ur.db.Where("product_id = ? AND user_id = ? AND size = ? AND status = ?", ProductID, UserID, Size, "cart").First(&TrxFinal)
+			return TrxFinal, err
 		}
 		// if err := ur.db.Table("products").Where("id = ?", ProductID).Select("price as Price").First(&Bill).Error; err != nil {
 		// 	return TrxAdded, errors.New("error ketika mencari harga dari ID produk")
@@ -41,6 +43,7 @@ func (ur *TransactionRepository) Insert(NewTransaction t.Transactions) (t.Transa
 		// 	return NewTransaction, errors.New("error ketika mengurangi stok produk")
 		// }
 	}
+	ur.db.Where("product_id = ? AND user_id = ? AND size = ? AND status = ?", ProductID, UserID, Size, "cart").First(&TrxAdded)
 	return TrxAdded, nil
 }
 
