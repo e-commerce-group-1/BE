@@ -16,7 +16,12 @@ func New(db *gorm.DB) *OrderRepository {
 }
 
 // ======================== Insert Order =================================
-func (ur *OrderRepository) Insert(NewOrder o.Orders) (o.Orders, error) {
+func (ur *OrderRepository) Insert(trxIDs []string, NewOrder o.Orders) (o.Orders, error) {
+	IDArr = []int{}
+	for i := 0; i < len(trxIDs); i++ {
+		IDArr = append(IDArr, int(string(trxIDs[i])))
+	}
+	TrxArr := ur.db.
 	if err := ur.db.Create(&NewOrder).Error; err != nil {
 		return NewOrder, err
 	}
