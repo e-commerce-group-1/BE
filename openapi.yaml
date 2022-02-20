@@ -922,7 +922,7 @@ paths:
         - bearerAuth: []
       requestBody:
         required: true
-        description: Mencari ID transaksi berdasarkan UserID (jwt), Produk ID, dan size
+        description: hanya butuh input request body size
         content:
           application/json:
             schema:
