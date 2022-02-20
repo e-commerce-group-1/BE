@@ -9,6 +9,7 @@ import (
 	"group-project1/deliveries/controllers/product"
 	"group-project1/deliveries/controllers/transaction"
 	"group-project1/deliveries/controllers/user"
+	"net/http"
 
 	"group-project1/deliveries/middlewares"
 
@@ -17,7 +18,11 @@ import (
 )
 
 func RegisterUserPath(e *echo.Echo, uc *user.UserController) {
-	e.Use(middleware.CORS())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
+	}))
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}",
@@ -46,6 +51,7 @@ func RegisterAdminPath(e *echo.Echo, ad *admin.AdminController) {
 }
 
 func RegisterProductPath(e *echo.Echo, pc *product.ProductController) {
+	// e.Use(middleware.CORS())
 	e.POST("/products", pc.Insert(), middlewares.JWTMiddleware())
 	e.GET("/products", pc.Get())
 	e.GET("/products/:id", pc.GetByID())
