@@ -57,7 +57,7 @@ func (uc *ProductController) GetByID() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan semua produk", ToProductGetByIDResponseFormat(res)))
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "sukses mendapatkan produk berdasarkan ID", ToProductGetByIDResponseFormat(res)))
 	}
 }
 
