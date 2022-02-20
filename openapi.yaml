@@ -842,7 +842,7 @@ paths:
                         size: '40'
                         qty: 5
                         status: 'cart'
-  /transactions/findid:  
+  /transactions/{id}:  
     get:
       summary: Mencari ID dari transaksi
       tags:
