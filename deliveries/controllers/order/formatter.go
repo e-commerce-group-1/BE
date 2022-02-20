@@ -44,18 +44,18 @@ func ToOrderResponseFormat(order o.Orders) OrderResponseFormat {
 	}
 }
 
-func ToOrderResponseFormatArr(orders []o.Orders) OrderResponseFormat {
-	Responses := OrderResponseFormat{}
+func ToOrderResponseFormatArr(orders []o.Orders) []OrderResponseFormat {
+	Responses := make([]OrderResponseFormat, len(orders))
 	for i := 0; i < len(orders); i++ {
 		strArr := strings.Split(orders[i].TransactionID, ",")
 
-		Responses.ID = orders[i].ID
-		Responses.UserID = orders[i].UserID
-		Responses.PaymentMethodID = orders[i].PaymentMethodID
-		Responses.TransactionID = strArr
-		Responses.Phone = orders[i].Phone
-		Responses.Address = orders[i].Address
-		Responses.Status = orders[i].Status
+		Responses[i].ID = orders[i].ID
+		Responses[i].UserID = orders[i].UserID
+		Responses[i].PaymentMethodID = orders[i].PaymentMethodID
+		Responses[i].TransactionID = strArr
+		Responses[i].Phone = orders[i].Phone
+		Responses[i].Address = orders[i].Address
+		Responses[i].Status = orders[i].Status
 
 	}
 	return Responses
