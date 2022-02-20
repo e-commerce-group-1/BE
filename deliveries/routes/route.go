@@ -4,12 +4,12 @@ import (
 	"group-project1/deliveries/controllers/address"
 	"group-project1/deliveries/controllers/admin"
 	"group-project1/deliveries/controllers/auth"
-	"group-project1/deliveries/controllers/product"
-	"group-project1/deliveries/controllers/product_category"
-	"group-project1/deliveries/controllers/user"
 	"group-project1/deliveries/controllers/order"
 	"group-project1/deliveries/controllers/payment_method"
+	"group-project1/deliveries/controllers/product"
+	"group-project1/deliveries/controllers/product_category"
 	"group-project1/deliveries/controllers/transaction"
+	"group-project1/deliveries/controllers/user"
 
 	"group-project1/deliveries/middlewares"
 
