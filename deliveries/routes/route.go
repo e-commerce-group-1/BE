@@ -7,8 +7,8 @@ import (
 	"group-project1/deliveries/controllers/order"
 	"group-project1/deliveries/controllers/payment_method"
 	"group-project1/deliveries/controllers/product"
-	"group-project1/deliveries/controllers/user"
 	"group-project1/deliveries/controllers/transaction"
+	"group-project1/deliveries/controllers/user"
 
 	"group-project1/deliveries/middlewares"
 
@@ -71,6 +71,6 @@ func RegisterOrderPath(e *echo.Echo, o *order.OrderController) {
 func RegisterTransactionPath(e *echo.Echo, tr *transaction.TransactionController) {
 	e.POST("/transactions", tr.Insert(), middlewares.JWTMiddleware())
 	e.GET("/transactions", tr.GetAllTrxByUserID(), middlewares.JWTMiddleware())
-	e.GET("/transactions/", tr.FindID(), middlewares.JWTMiddleware())
+	e.GET("/transactions/findid", tr.FindID(), middlewares.JWTMiddleware())
 	e.DELETE("/transactions/:id", tr.DeleteByID(), middlewares.JWTMiddleware())
 }
