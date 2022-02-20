@@ -1,5 +1,65 @@
 package transaction
 
+import (
+	"errors"
+	t "group-project1/entities/transaction"
+
+	"gorm.io/gorm"
+)
+
+type TransactionRepository struct {
+	db *gorm.DB
+}
+
+func New(db *gorm.DB) *TransactionRepository {
+	return &TransactionRepository{db: db}
+}
+
+// ======================== Insert Transaction ===============================
+func (ur *TransactionRepository) Insert(NewTransaction t.Transactions) (t.Transactions, error) {
+	if err := ur.db.Create(&NewTransaction).Error; err != nil {
+		return NewTransaction, err
+	}
+	return NewTransaction, nil
+}
+
+// ======================== Get Transactions ByID ==================================
+func (ur *TransactionRepository) GetByID(ProductID uint, UserID uint) (t.Transactions, error) {
+	trx := t.Transactions{}
+	res := ur.db.Model(&t.Transactions{}).Where("product_id = ? AND user_id = ?", ProductID, UserID).Find(&trx)
+	if res.Error != nil {
+		return trx, errors.New(gorm.ErrRecordNotFound.Error())
+	}
+	return trx, nil
+}
+
+// ======================== Update Transaction ==============================
+func (ur *TransactionRepository) UpdateByID(ProductID uint, UserID uint, UpdatedTrx t.Transactions) (t.Transactions, error) {
+	trxTemp := t.Transactions{}
+	res := ur.db.Model(&trxTemp).Where("product_id = ? AND user_id = ?", ProductID, UserID).Updates(UpdatedTrx)
+	if res.RowsAffected == 0 {
+		return UpdatedTrx, errors.New("tidak ada pemutakhiran pada data transaksi")
+	}
+	ur.db.First(&UpdatedTrx)
+	return UpdatedTrx, nil
+}
+
+// ======================== Delete Transaction ==============================
+func (ur *TransactionRepository) DeleteByID(ProductID uint, UserID uint) error {
+	var transaction t.Transactions
+	res := ur.db.Model(&transaction).Where("product_id = ? AND user_id = ?", ProductID, UserID).Delete(transaction)
+	if res.RowsAffected == 0 {
+		return errors.New("tidak ada transaksi yang dihapus")
+	}
+	return nil
+}
+
+
+
+
+
+
+// ======================================================= comment===========================
 // import (
 // 	"errors"
 // 	"group-project1/entities/product"
