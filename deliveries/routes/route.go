@@ -8,7 +8,7 @@ import (
 	"group-project1/deliveries/controllers/payment_method"
 	"group-project1/deliveries/controllers/product"
 	"group-project1/deliveries/controllers/product_category"
-	"group-project1/deliveries/controllers/transaction"
+	// "group-project1/deliveries/controllers/transaction"
 	"group-project1/deliveries/controllers/user"
 
 	"group-project1/deliveries/middlewares"
@@ -75,9 +75,9 @@ func RegisterOrderPath(e *echo.Echo, o *order.OrderController) {
 	// e.DELETE("/orders/:id", pm.Delete())
 }
 
-func RegisterTransactionPath(e *echo.Echo, tr *transaction.TransactionController) {
-	e.POST("/transactions", tr.Insert())
-	e.GET("/transactions", tr.Get())
-	e.PUT("/transactions/:id", tr.Update())
-	e.DELETE("/transactions/:id", tr.Delete())
-}
+// func RegisterTransactionPath(e *echo.Echo, tr *transaction.TransactionController) {
+// 	// e.POST("/transactions", tr.Insert())
+// 	// e.GET("/transactions", tr.Get())
+// 	// e.PUT("/transactions/:id", tr.Update())
+// 	// e.DELETE("/transactions/:id", tr.Delete())
+// }
