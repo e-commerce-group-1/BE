@@ -17,47 +17,90 @@ func New(db *gorm.DB) *TransactionRepository {
 
 // ======================== Insert Transaction ===============================
 func (ur *TransactionRepository) Insert(NewTransaction t.Transactions) (t.Transactions, error) {
-	if err := ur.db.Create(&NewTransaction).Error; err != nil {
-		return NewTransaction, err
+	ProductID := NewTransaction.ProductID
+	UserID := NewTransaction.UserID
+	Size := NewTransaction.Size
+	// Bill := SetBill{}
+	TrxAdded := t.Transactions{}
+	// if err := ur.db.Model(&t.Transactions{}).Select("transactions.id as ID, transactions.product_id as ProductID, transactions.user_id as UserID, transactions.qty as Qty, transactions.bill as Bill, products.price as Price").Joins("inner join products on products.id = transactions.product_id").Scan(&TrxAdded); err == nil {
+	// 	return TrxAdded, errors.New("produk sudah ditambahkan ke dalam keranjang")
+	// }
+	if err := ur.db.Where("product_id = ? AND user_id = ? AND size = ?", ProductID, UserID, Size).First(&TrxAdded).Error; err != nil {
+		if NewTransaction.Qty == 0 {
+			NewTransaction.Qty = 1
+		}
+		if err := ur.db.Create(&NewTransaction).Error; err != nil {
+			return NewTransaction, err
+		}
+		// if err := ur.db.Table("products").Where("id = ?", ProductID).Select("price as Price").First(&Bill).Error; err != nil {
+		// 	return TrxAdded, errors.New("error ketika mencari harga dari ID produk")
+		// }
+		// NewTransaction.Bill = bill.Price * NewTransaction.Qty
+
+		// if err := ur.db.Table("products").Where("id = ?", ProductID).Update("stock", gorm.Expr("stock - ?", NewTransaction.Qty)).Error; err != nil {
+		// 	return NewTransaction, errors.New("error ketika mengurangi stok produk")
+		// }
 	}
-	return NewTransaction, nil
+	return TrxAdded, nil
 }
 
+// func (ur *TransactionRepository) UpdateQty(ProductID uint, UserID uint, Size string, Qty uint) (t.Transactions, error) {
+// 	Trx := t.Transactions{}
+// 	if err := ur.db.Where("product_id = ? AND user_id = ? AND size = ?", ProductID, UserID, Size).First(&Trx).Error; err != nil {
+// 		return Trx, err
+// 	}
+
+// 	if err := ur.db.Table("transactions").Where("product_id = ? AND user_id = ? AND size = ?", ProductID, UserID, Size).Update("qty", Qty).Error; err != nil {
+// 		return Trx, err
+// 	}
+
+// 	// if err := ur.db.Table("products").Where("id = ?", ProductID).Update("stock", gorm.Expr("stock - ?", NewTransaction.Qty)).Error; err != nil {
+// 	// 	return NewTransaction, errors.New("error ketika mengurangi stok produk")
+// 	// }
+
+// 	ur.db.Where("product_id = ? AND user_id = ? AND size = ?", ProductID, UserID, Size).First(&Trx)
+// 	return Trx, nil
+// }
+
 // ======================== Get Transactions ByID ==================================
-func (ur *TransactionRepository) GetByID(ProductID uint, UserID uint) (t.Transactions, error) {
-	trx := t.Transactions{}
-	res := ur.db.Model(&t.Transactions{}).Where("product_id = ? AND user_id = ?", ProductID, UserID).Find(&trx)
+func (ur *TransactionRepository) GetAllTrxByUserID(UserID uint) ([]t.Transactions, error) {
+	trx := []t.Transactions{}
+	res := ur.db.Model(&t.Transactions{}).Where("user_id = ? AND status = ?", UserID, "cart").Find(&trx)
 	if res.Error != nil {
 		return trx, errors.New(gorm.ErrRecordNotFound.Error())
 	}
 	return trx, nil
 }
 
-// ======================== Update Transaction ==============================
-func (ur *TransactionRepository) UpdateByID(ProductID uint, UserID uint, UpdatedTrx t.Transactions) (t.Transactions, error) {
-	trxTemp := t.Transactions{}
-	res := ur.db.Model(&trxTemp).Where("product_id = ? AND user_id = ?", ProductID, UserID).Updates(UpdatedTrx)
-	if res.RowsAffected == 0 {
-		return UpdatedTrx, errors.New("tidak ada pemutakhiran pada data transaksi")
-	}
-	ur.db.First(&UpdatedTrx)
-	return UpdatedTrx, nil
-}
-
-// ======================== Delete Transaction ==============================
-func (ur *TransactionRepository) DeleteByID(ProductID uint, UserID uint) error {
-	var transaction t.Transactions
-	res := ur.db.Model(&transaction).Where("product_id = ? AND user_id = ?", ProductID, UserID).Delete(transaction)
+func (ur *TransactionRepository) DeleteByID(ProductID, UserID uint) error {
+	var trx t.Transactions
+	res := ur.db.Model(&trx).Where("product_id = ? AND user_id = ?", ProductID, UserID).Delete(&trx)
 	if res.RowsAffected == 0 {
 		return errors.New("tidak ada transaksi yang dihapus")
 	}
 	return nil
 }
 
+func (ur *TransactionRepository) FindID(ProductID, UserID uint) (uint, error) {
+	var trx t.Transactions
+	if err := ur.db.Model(&trx).Where("product_id = ? AND user_id = ?", ProductID, UserID).First(&trx).Error; err != nil {
+		return 0, errors.New(gorm.ErrRecordNotFound.Error())
+	}
+	return trx.ID, nil
+}
 
+// ======================== Update Transaction ==============================
+// func (ur *TransactionRepository) UpdateByID(ProductID uint, UserID uint, UpdatedTrx t.Transactions) (t.Transactions, error) {
+// 	trxTemp := t.Transactions{}
+// 	res := ur.db.Model(&trxTemp).Where("product_id = ? AND user_id = ?", ProductID, UserID).Updates(UpdatedTrx)
+// 	if res.RowsAffected == 0 {
+// 		return UpdatedTrx, errors.New("tidak ada pemutakhiran pada data transaksi")
+// 	}
+// 	ur.db.First(&UpdatedTrx)
+// 	return UpdatedTrx, nil
+// }
 
-
-
+// ======================== Delete Transaction ==============================
 
 // ======================================================= comment===========================
 // import (

@@ -6,10 +6,10 @@ import (
 
 type Transactions struct {
 	gorm.Model
-	UserID    uint   `gorm:"primaryKey"`
-	ProductID uint   `gorm:"primaryKey"`
-	Qty       uint   `gorm:"type:int(11)"`
-	Price     uint   `gorm:"type:int(11)"`
+	ProductID uint
+	UserID    uint
+	Size      string `gorm:"type:varchar(5)"`
+	Qty       uint   `gorm:"type:int(11);default:1"`
 	Status    string `gorm:"type:enum('cart', 'order', 'payed', 'cancel');default:'cart'"`
-	OrderID   uint   `gorm:"foreignKey:TransactionID"`
+	OrderID   uint
 }
