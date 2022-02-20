@@ -24,13 +24,12 @@ func (ur *AddressRepository) Insert(NewAddress a.Addresses) (a.Addresses, error)
 }
 
 // ======================== Get Addresses ==================================
-func (ur *AddressRepository) Get() ([]a.Addresses, error) {
-	addresses := []a.Addresses{}
-	ur.db.Find(&addresses)
-	if len(addresses) == 0 {
-		return nil, errors.New("belum ada alamat yang terdaftar")
+func (ur *AddressRepository) GetByOrderID(OrderID uint) (a.Addresses, error) {
+	address := a.Addresses{}
+	if err := ur.db.Where("order_id = ?", OrderID).First(&address).Error; err != nil {
+		return address, errors.New("alamat tidak ada")
 	}
-	return addresses, nil
+	return address, nil
 }
 
 // ======================== Update Address =================================

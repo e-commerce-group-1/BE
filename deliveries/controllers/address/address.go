@@ -24,7 +24,7 @@ func New(address addressRepo.Address) *AddressController {
 func (ac *AddressController) Insert() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		NewAddress := CreateAddressRequestFormat{}
-		UserID := uint(middlewares.ExtractTokenUserId(c))
+		OrderID := uint(middlewares.ExtractTokenUserId(c))
 
 		if err := c.Bind(&NewAddress); err != nil {
 			return c.JSON(http.StatusBadRequest, common.BadRequest())
@@ -34,26 +34,37 @@ func (ac *AddressController) Insert() echo.HandlerFunc {
 			Street:   NewAddress.Street,
 			City:     NewAddress.City,
 			Province: NewAddress.Province,
-			ZipCode:  NewAddress.ZipCode,
-			UserID:   UserID,
+			OrderID:  OrderID,
 		})
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan alamat baru", ToCreateAddressResponseFormat(res)))
+		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan alamat baru", ToAddressResponseFormat(res)))
+	}
+}
+
+func (ac *AddressController) GetByOrderID() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		OrderID, _ := strconv.Atoi(c.Param("id"))
+
+		res, err := ac.Repo.GetByOrderID(uint(OrderID))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
+		}
+		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "sukses menambahkan alamat baru", ToAddressResponseFormat(res)))
 	}
 }
 
 func (ac *AddressController) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		AddID, _ := strconv.Atoi(c.Param("id"))
+		OrderID, _ := strconv.Atoi(c.Param("id"))
 		var UpdateAddress = UpdateAddressRequestFormat{}
 
 		if err := c.Bind(&UpdateAddress); err != nil {
 			return c.JSON(http.StatusBadRequest, common.BadRequest())
 		}
-		res, err := ac.Repo.Update(UpdateAddress.ToUpdateAddressRequestFormat(uint(AddID)))
+		res, err := ac.Repo.Update(UpdateAddress.ToUpdateAddressRequestFormat(uint(OrderID)))
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, common.InternalServerError())
