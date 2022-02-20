@@ -7,18 +7,18 @@ import (
 	"group-project1/deliveries/controllers/auth"
 	"group-project1/deliveries/controllers/order"
 	"group-project1/deliveries/controllers/payment_method"
-	"group-project1/deliveries/controllers/user"
 	"group-project1/deliveries/controllers/product"
-	"group-project1/utils"
+	"group-project1/deliveries/controllers/user"
 	route "group-project1/deliveries/routes"
+	"group-project1/utils"
 
+	_addressRepo "group-project1/repository/address"
 	_adminRepo "group-project1/repository/admin"
 	_authRepo "group-project1/repository/auth"
 	_orderRepo "group-project1/repository/order"
 	_payRepo "group-project1/repository/payment_method"
 	_productRepo "group-project1/repository/product"
 	_userRepo "group-project1/repository/user"
-	_addressRepo "group-project1/repository/address"
 
 	"fmt"
 
