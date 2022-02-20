@@ -920,6 +920,18 @@ paths:
             type: integer
       security:
         - bearerAuth: []
+      requestBody:
+        required: true
+        description: Mencari ID transaksi berdasarkan UserID (jwt), Produk ID, dan size
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                size:
+                  type: string
+              example:
+                  size: '39'
       responses:
         '200':
           description: OK
