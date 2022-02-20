@@ -5,9 +5,9 @@ info:
   contact:
     name: BE - Grup 1
     email: yusufnurwahid.contact@gmail.com
-  version: "1.0"
+  version: "2.0"
 servers:
-  - url: https://api.server.dev/{version}
+  - url: http://3.1.211.120:8081/{version}
     variables:
       version:
         default: v1
@@ -25,14 +25,10 @@ tags:
     description: Daftar products
   - name: Transactions
     description: Daftar transactions
-  - name: Transaction Details
-    description: Daftar transaction details
   - name: Orders
     description: Daftar orders
   - name: Payment Methods
     description: Daftar payment methods
-  - name: Product Categories
-    description: Daftar product categories
 paths:
   /auth/login:
     post:
@@ -56,13 +52,20 @@ paths:
                 # $ref: '#/components/schemas/SuccessSingleResponse'
               example:
                 code: 200
-                success: true
-                message: Berhasil mengautorisasi user
+                message: berhasil masuk, mendapatkan token baru
                 data:
-                  user_name: franz1
+                  email: ucup@ucup.com
                   token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-        '401':
-          $ref: '#/components/responses/401'
+        '500':
+          description: Kesalahan autorisasi
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                code: 500
+                message: terdapat error di dalam server
+                data:
   /users:
     post:
       summary: Tambahkan user baru
@@ -79,26 +82,20 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Frans Ihsan
                 user_name:
                   type: string
-                  example: frans1
                 email:
                   type: string
-                  example: frans@frans.com
                 password:
                   type: string
                   format: password
-                  example: frans123
-                dob:
-                  type: string
-                  format: date
-                  example: 2022-02-15
-                gender:
-                  type: boolean
-                  example: 1
+              example:
+                name: Frans Ihsan
+                user_name: frans1
+                email: frans@frans.com
+                password: frans123
       responses:
-        '200':
+        '201':
           description: OK
           content:
             application/json:
@@ -107,50 +104,26 @@ paths:
                 properties:
                   code:
                     type: integer
-                    example: 200
-                  success:
-                    type: boolean
                   message:
                     type: string
-                    example: Berhasil menambahkan user baru
                   data:
                     type: object
                     properties:
-                      id:
-                        type: integer
-                        example: 1
                       name:
                         type: string
-                        example: Frans Ihsan
                       user_name:
                         type: string
-                        example: frans1
                       email:
                         type: string
-                        example: frans@frans.com
-                      password:
-                        type: string
-                        format: password
-                        example: frans123
-                      dob:
-                        type: string
-                        format: date
-                        example: 2022-02-15
-                      gender:
-                        type: boolean
-                        example: 1
+                example:
+                  code: 200
+                  message: sukses menambahkan user baru
+                  data:
+                    name: Frans Ihsan
+                    user_name: frans1
+                    email: frans@frans.com
         '400':
-          $ref: '#/components/responses/400'
-    get:
-      summary: Dapatkan semua detail user
-      tags:
-        - Users
-      description: Cek selengkapnya di HTML bro
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
+          description: Bad request
           content:
             application/json:
               schema:
@@ -158,84 +131,116 @@ paths:
                 properties:
                   code:
                     type: integer
-                    example: 200
-                  status:
-                    type: boolean
+                  message:
+                    type: string
                   data:
                     type: object
                     properties:
-                      id:
-                        type: integer
-                      address_id:
-                        type: integer
                       name:
                         type: string
                       user_name:
                         type: string
                       email:
                         type: string
-                      password:
-                        type: string
-                        format: password
-                      dob:
-                        type: string
-                        format: date
-                      gender:
-                        type: boolean
-                      created_at:
-                        type: string
-                        format: date-time
-                      updated_at:
-                        type: string
-                        format: date-time
-                      deleted_at:
-                        type: string
-                        format: date-time
-                    example:
-                        id: 1
-                        address_id: 1
-                        name: Frans Ihsan
-                        user_name: frans1
-                        email: frans@frans.com
-                        password: frans123
-                        dob: 2022-02-15
-                        gender: 1
-                        created_at: 2022-02-15T05:19:20Z
-                        updated_at: 2022-02-15T05:20:20Z
-                        deleted_at: 2022-02-15T05:21:20Z
-    put:
-      summary: Ubah record berdasarkan ID
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: '#/components/schemas/UserInput'
-            example:
-              name: Franz Ichsan
-              user_name: franz1
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: '#/components/schemas/SuccessSingleResponse'
-              example:
-                code: 200
-                success: true
-                message: Berhasil ubah data user
-                data:
-                  name: Franz Ichsan
-                  user_name: franz1
-        '204':
-          $ref: '#/components/responses/204'
+                example:
+                  code: 400
+                  message: input client tidak sesuai
+                  data:
+    # get:
+    #   summary: Dapatkan semua detail user
+    #   tags:
+    #     - Users
+    #   description: Cek selengkapnya di HTML bro
+    #   security:
+    #     - bearerAuth: []
+    #   responses:
+    #     '200':
+    #       description: OK
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: object
+    #             properties:
+    #               code:
+    #                 type: integer
+    #                 example: 200
+    #               status:
+    #                 type: boolean
+    #               data:
+    #                 type: object
+    #                 properties:
+    #                   id:
+    #                     type: integer
+    #                   address_id:
+    #                     type: integer
+    #                   name:
+    #                     type: string
+    #                   user_name:
+    #                     type: string
+    #                   email:
+    #                     type: string
+    #                   password:
+    #                     type: string
+    #                     format: password
+    #                   dob:
+    #                     type: string
+    #                     format: date
+    #                   gender:
+    #                     type: boolean
+    #                   created_at:
+    #                     type: string
+    #                     format: date-time
+    #                   updated_at:
+    #                     type: string
+    #                     format: date-time
+    #                   deleted_at:
+    #                     type: string
+    #                     format: date-time
+    #                 example:
+    #                     id: 1
+    #                     address_id: 1
+    #                     name: Frans Ihsan
+    #                     user_name: frans1
+    #                     email: frans@frans.com
+    #                     password: frans123
+    #                     dob: 2022-02-15
+    #                     gender: 1
+    #                     created_at: 2022-02-15T05:19:20Z
+    #                     updated_at: 2022-02-15T05:20:20Z
+    #                     deleted_at: 2022-02-15T05:21:20Z
+    # put:
+    #   summary: Ubah record berdasarkan ID
+    #   tags:
+    #     - Users
+    #   requestBody:
+    #     required: true
+    #     content:
+    #       application/json:
+    #         schema:
+    #           type: object
+    #           $ref: '#/components/schemas/UserInput'
+    #         example:
+    #           name: Franz Ichsan
+    #           user_name: franz1
+    #   security:
+    #     - bearerAuth: []
+    #   responses:
+    #     '200':
+    #       description: OK
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: object
+    #             $ref: '#/components/schemas/SuccessSingleResponse'
+    #           example:
+    #             code: 200
+    #             success: true
+    #             message: Berhasil ubah data user
+    #             data:
+    #               name: Franz Ichsan
+    #               user_name: franz1
+    #     '204':
+    #       $ref: '#/components/responses/204'
     delete:
       tags:
         - Users
@@ -252,9 +257,8 @@ paths:
                 $ref: '#/components/schemas/SuccessSingleResponse'
               example:
                 code: 200
-                success: true
-                message: Berhasil hapus data user
-                data: {}
+                message: sukses menghapus user
+                data:
   /addresses:
     post:
       summary: Tambah alamat baru
@@ -980,242 +984,6 @@ paths:
                 success: true
                 message: Berhasil hapus data transaksi
                 data: {}
-  /transaction-details/:
-    get:
-      summary: Dapatkan seluruh transaksi detail
-      tags:
-        - Transaction Details
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                    code:
-                      type: integer
-                    success:
-                      type: boolean
-                    message:
-                      type: string
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          transaction_id:
-                            type: integer
-                          product_id:
-                            type: integer
-                          qty:
-                            type: integer
-                          price:
-                            type: integer
-                example:
-                  code: 200
-                  success: true
-                  message: Berhasil mendapatkan semua transaksi detail
-                  data:
-                    - transaction_id: 1
-                      product_id: 1
-                      qty: 3
-                      price: 4500000
-                    - transaction_id: 2
-                      product_id: 2
-                      qty: 2
-                      price: 2500000
-  /transaction-details/{transaction_id}/{product_id}:
-    post:
-      summary: Tambah transaksi detail baru
-      tags:
-        - Transaction Details
-      parameters:
-        - name: transaction_id
-          in: path
-          description: ID transaksi hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
-        - name: product_id
-          in: path
-          description: ID produk hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        description: Menambahkan transaksi detail baru dengan input yang sesuai
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                qty:
-                  type: integer
-                price:
-                  type: integer
-              example:
-                total_qty: 3
-                total_price: 4500000
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      qty:
-                        type: integer
-                      price:
-                        type: integer
-                example:
-                  code: 200
-                  success: true
-                  message: Berhasil menambahkan transaksi detail baru
-                  data:
-                    transaction_id: 1
-                    product_id: 1
-                    total_qty: 3
-                    total_price: 4500000
-        '400':
-          $ref: '#/components/responses/400'
-    put:
-      summary: Update data transaksi detail
-      tags:
-        - Transaction Details
-      parameters:
-        - name: transaction_id
-          in: path
-          description: ID transaksi hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
-        - name: product_id
-          in: path
-          description: ID produk hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        description: Mengubah data transaksi detail dengan input yang sesuai
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                qty:
-                  type: integer
-                price:
-                  type: integer
-              example:
-                  qty: 2
-                  price: 2500000
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      transaction_id:
-                        type: integer
-                      product_id:
-                        type: integer
-                      qty:
-                        type: integer
-                      price:
-                        type: integer
-                example:
-                  code: 200
-                  success: true
-                  message: Berhasil mengupdate data transaksi detail
-                  data:
-                    transaction_id: 1
-                    product_id: 1
-                    total_qty: 2
-                    total_price: 2500000
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          description: Kesalahan autorisasi
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: object
-              example:
-                  code: 401
-                  success: false
-                  message: User tidak terautorisasi
-                  data: {}
-    delete:
-      summary: Hapus sebuah detail transaksi
-      tags:
-        - Transaction Details
-      parameters:
-        - name: transaction_id
-          in: path
-          description: ID transaksi hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
-        - name: product_id
-          in: path
-          description: ID produk hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: '#/components/schemas/SuccessSingleResponse'
-              example:
-                code: 200
-                success: true
-                message: Berhasil hapus data transaksi detail
-                data: {}
   /orders:
     post:
       summary: Tambah order baru
@@ -1628,194 +1396,6 @@ paths:
                 success: true
                 message: Berhasil hapus data payment method
                 data: {}
-  /product-categories:
-    post:
-      summary: Tambah kategori produk baru
-      tags:
-        - Product Categories
-      requestBody:
-        required: true
-        description: Menambahkan kategori produk baru dengan input yang sesuai
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-              example:
-                name: Sneakers
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      name:
-                        type: string
-                example:
-                  code: 200
-                  success: true
-                  message: Berhasil menambahkan kategori produk baru
-                  data:
-                    id: 1
-                    name: Sneakers
-        '400':
-          $ref: '#/components/responses/400'
-    get:
-      summary: Dapatkan semua kategori produk
-      tags:
-        - Product Categories
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        name:
-                          type: string
-                example:
-                  code: 200
-                  success: true
-                  message: Berhasil mendapatkan semua kategori produk
-                  data:
-                  - id: 1
-                    name: Sneakers
-                  - id: 2
-                    name: T-Shirt
-  /product-categories/{id}:  
-    put:
-      summary: Update data kategori produk
-      tags:
-        - Product Categories
-      parameters:
-        - name: id
-          in: path
-          description: ID kategori produk hasil generate dari sistem
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        description: Mengubah data kategori produk dengan input yang sesuai
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-              example:
-                id: 1
-                name: Hat
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      name:
-                        type: string
-                example:
-                  code: 200
-                  success: true
-                  message: Berhasil mengupdate data kategori produk
-                  data:
-                    id: 1
-                    name: Hat
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          description: Kesalahan autorisasi
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: object
-              example:
-                  code: 401
-                  success: false
-                  message: User tidak terautorisasi
-                  data: {}
-    delete:
-      summary: Hapus sebuah kategori product
-      tags:
-        - Product Categories
-      parameters:
-        - name: id
-          in: path
-          description: ID kategori produk hasil generate sistem
-          required: true
-          schema:
-            type: integer
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: '#/components/schemas/SuccessSingleResponse'
-              example:
-                code: 200
-                success: true
-                message: Berhasil hapus data kategori produk
-                data: {}
 components:
   parameters:
     UserID:
@@ -1828,10 +1408,13 @@ components:
     UserLogin:
       type: object
       properties:
-        user_name:
+        email:
           type: string
         password:
           type: string
+      example:
+        email: ucup@ucup.com
+        password: ucup123
     UserInput:
       type: object
       properties:
