@@ -5,9 +5,10 @@ import "group-project1/entities/product"
 // =================== Create Product ======================
 type CreateProductRequestFormat struct {
 	Name        string `json:"name" form:"name"`
+	Category    string `json:"category" form:"category"`
 	Description string `json:"description" form:"description"`
 	Gender      bool   `json:"gender" form:"gender"`
-	Size        uint   `json:"size" form:"size"`
+	Size        string `json:"size" form:"size"`
 	Price       uint   `json:"price" form:"price"`
 	Stock       uint   `json:"stock" form:"stock"`
 	Image       string `json:"image" form:"image"`
@@ -16,6 +17,7 @@ type CreateProductRequestFormat struct {
 func (CPRF CreateProductRequestFormat) ToCreateProductEntity(ProductCategoryID uint) product.Products {
 	return product.Products{
 		Name:              CPRF.Name,
+		Category:          CPRF.Category,
 		Description:       CPRF.Description,
 		Gender:            CPRF.Gender,
 		Size:              CPRF.Size,
@@ -27,18 +29,22 @@ func (CPRF CreateProductRequestFormat) ToCreateProductEntity(ProductCategoryID u
 }
 
 type CreateProductResponseFormat struct {
-	Name        string `json:"name" form:"name"`
-	Description string `json:"description" form:"description"`
-	Gender      bool   `json:"gender" form:"gender"`
-	Size        uint   `json:"size" form:"size"`
-	Price       uint   `json:"price" form:"price"`
-	Stock       uint   `json:"stock" form:"stock"`
-	Image       string `json:"image" form:"image"`
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Category    string `json:"category"`
+	Description string `json:"description"`
+	Gender      bool   `json:"gender"`
+	Size        string `json:"size"`
+	Price       uint   `json:"price"`
+	Stock       uint   `json:"stock"`
+	Image       string `json:"image"`
 }
 
 func ToCreateProductResponseFormat(P product.Products) CreateProductResponseFormat {
 	return CreateProductResponseFormat{
+		ID:          P.ID,
 		Name:        P.Name,
+		Category:    P.Category,
 		Description: P.Description,
 		Gender:      P.Gender,
 		Size:        P.Size,
@@ -51,9 +57,10 @@ func ToCreateProductResponseFormat(P product.Products) CreateProductResponseForm
 // =================== Update Product ======================
 type UpdateProductRequestFormat struct {
 	Name        string `json:"name" form:"name"`
+	Category    string `json:"category" form:"category"`
 	Description string `json:"description" form:"description"`
 	Gender      bool   `json:"gender" form:"gender"`
-	Size        uint   `json:"size" form:"size"`
+	Size        string `json:"size" form:"size"`
 	Price       uint   `json:"price" form:"price"`
 	Stock       uint   `json:"stock" form:"stock"`
 	Image       string `json:"image" form:"image"`
@@ -62,6 +69,7 @@ type UpdateProductRequestFormat struct {
 func (UPRF UpdateProductRequestFormat) ToUpdateProductEntity(ProductCategoryID uint) product.Products {
 	return product.Products{
 		Name:              UPRF.Name,
+		Category:          UPRF.Category,
 		Description:       UPRF.Description,
 		Gender:            UPRF.Gender,
 		Size:              UPRF.Size,
@@ -73,10 +81,12 @@ func (UPRF UpdateProductRequestFormat) ToUpdateProductEntity(ProductCategoryID u
 }
 
 type UpdateProductResponseFormat struct {
+	ID          uint   `json:"id"`
 	Name        string `json:"name"`
+	Category    string `json:"category" form:"category"`
 	Description string `json:"description"`
 	Gender      bool   `json:"gender"`
-	Size        uint   `json:"size"`
+	Size        string `json:"size"`
 	Price       uint   `json:"price"`
 	Stock       uint   `json:"stock"`
 	Image       string `json:"image"`
@@ -84,7 +94,9 @@ type UpdateProductResponseFormat struct {
 
 func ToUpdateProductResponseFormat(P product.Products) UpdateProductResponseFormat {
 	return UpdateProductResponseFormat{
+		ID:          P.ID,
 		Name:        P.Name,
+		Category:    P.Category,
 		Description: P.Description,
 		Gender:      P.Gender,
 		Size:        P.Size,
@@ -96,13 +108,14 @@ func ToUpdateProductResponseFormat(P product.Products) UpdateProductResponseForm
 
 // =================== Get Products =======================
 type GetProductResponseFormat struct {
-	Name        string `json:"name" form:"name"`
-	Description string `json:"description" form:"description"`
-	Gender      bool   `json:"gender" form:"gender"`
-	Size        uint   `json:"size" form:"size"`
-	Price       uint   `json:"price" form:"price"`
-	Stock       uint   `json:"stock" form:"stock"`
-	Image       string `json:"image" form:"image"`
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Gender      bool   `json:"gender"`
+	Size        string `json:"size"`
+	Price       uint   `json:"price"`
+	Stock       uint   `json:"stock"`
+	Image       string `json:"image"`
 }
 
 func ToProductGetResponseFormat(Responses []product.Products) []GetProductResponseFormat {
@@ -121,6 +134,7 @@ func ToProductGetResponseFormat(Responses []product.Products) []GetProductRespon
 
 func ToProductGetByIDResponseFormat(Response product.Products) GetProductResponseFormat {
 	return GetProductResponseFormat{
+		ID:          Response.ID,
 		Name:        Response.Name,
 		Description: Response.Description,
 		Gender:      Response.Gender,
