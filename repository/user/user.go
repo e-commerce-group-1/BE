@@ -27,6 +27,7 @@ func (ur *UserRepository) Insert(newUser u.Users) (u.Users, error) {
 
 // ======================== Update User ==================================
 func (ur *UserRepository) Update(userUpdate u.Users) (u.Users, error) {
+	userUpdate.Password, _ = hash.HashPassword(userUpdate.Password)
 	res := ur.db.Model(&userUpdate).Updates(userUpdate)
 	if res.RowsAffected == 0 {
 		return userUpdate, errors.New("tidak ada pemutakhiran pada data user")
