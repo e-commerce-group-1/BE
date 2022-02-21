@@ -1,5 +1,4 @@
 configs/config.yaml
 openapi.yaml
-*.jpg
 *.png
 *.json
