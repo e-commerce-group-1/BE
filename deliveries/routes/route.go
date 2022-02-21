@@ -69,9 +69,9 @@ func RegisterPayMethodPath(e *echo.Echo, pm *payment_method.PMController) {
 func RegisterOrderPath(e *echo.Echo, o *order.OrderController) {
 	e.Use(middleware.CORS())
 	e.POST("/orders", o.Insert(), middlewares.JWTMiddleware())
-	e.GET("/orders/getuserbyid", o.GetByUserID(), middlewares.JWTMiddleware())
-	e.GET("/orders/setpayed/:id", o.SetPayed(), middlewares.JWTMiddleware())
-	e.GET("/orders/setcancel/:id", o.SetCancel(), middlewares.JWTMiddleware())
+	e.GET("/orders/ordersbyid", o.GetByUserID(), middlewares.JWTMiddleware())
+	e.PUT("/orders/setpayed/:id", o.SetPayed(), middlewares.JWTMiddleware())
+	e.PUT("/orders/setcancel/:id", o.SetCancel(), middlewares.JWTMiddleware())
 	e.GET("/orders", o.GetHistoryByUserID(), middlewares.JWTMiddleware())
 }
 

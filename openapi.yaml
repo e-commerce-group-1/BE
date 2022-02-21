@@ -5,18 +5,9 @@ info:
   contact:
     name: BE - Grup 1
     email: yusufnurwahid.contact@gmail.com
-  version: "2.1"
+  version: "2.1.1"
 servers:
-  - url: http://3.1.211.120:8081/{entity}
-    variables:
-      entity:
-        default: users
-        enum:
-          - users
-          - login
-          - products
-          - addresses
-          - transactions
+  - url: http://3.1.211.120:8081/
 tags:
   - name: Auth
     description: Autorisasi users
@@ -1021,6 +1012,7 @@ paths:
                     status: order
         '400':
           $ref: '#/components/responses/400'
+  /orders/ordersbyid:  
     get:
       summary: Dapatkan semua orders
       tags:
@@ -1046,31 +1038,36 @@ paths:
                     items:
                       type: object
                       properties:
-                        transaction_id:
+                        id:
+                          type: integer
+                        user_id:
                           type: integer
                         payment_method_id:
                           type: integer
-                        phone:
-                          type: string
-                        status:
-                          type: string
-                          format: timestamp
-                example:
-                  code: 200
-                  success: true
-                  message: Berhasil mendapatkan semua orders
-                  data:
-                  - transaction_id: 1
-                    payment_method_id: 1
-                    phone: '081234445566'
-                    status: 2022:02:16T12:00:00Z
-                  - transaction_id: 2
-                    payment_method_id: 2
-                    phone: '081234445567'
-                    status: 2022:02:16T13:00:00Z
-  /orders/{id}:  
+                        transaction_id:
+                          type: array
+                          items:
+                            type: string
+                    example:
+                      code: 200
+                      message: sukses mendapatkan semua order berdasarkan UserID
+                      data:
+                        - id: 2
+                          user_id: 2
+                          payment_method_id: 1
+                          transaction_id: 
+                              11
+                          phone: 08123123123
+                          address:
+                              ID: 0
+                              Street: Jl. sesama
+                              City: Jakarta
+                              Province: DKI Jakarta
+                              OrderID: 2
+                          status: order
+  /orders/setpayed/:id:  
     put:
-      summary: Update data order
+      summary: Ubah status order dari cart ke payed
       tags:
         - Orders
       parameters:
@@ -1080,22 +1077,6 @@ paths:
           required: true
           schema:
             type: integer
-      requestBody:
-        required: true
-        description: Mengubah data order dengan input yang sesuai
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                phone:
-                  type: string
-                status:
-                  type: string
-                  format: timestamp
-              example:
-                  phone: '081234445569'
-                  status: 1970:01:01T00:00:00Z
       security:
         - bearerAuth: []
       responses:
@@ -1115,20 +1096,30 @@ paths:
                   data:
                     type: object
                     properties:
-                      phone:
+                      ID:
+                        type: integer
+                      UserID:
+                        type: integer
+                      PaymentMethodID:
+                        type: integer
+                      TransactionID:
+                        type: array
+                        items:
+                          type: string
+                      Phone:
                         type: string
-                      status:
-                        type: string
-                        format: timestamp
+                      Address:
+                        type: object
+                        properties:
+                                                    
+                      Status:          order.Status,
                 example:
                   code: 200
-                  success: true
-                  message: Berhasil mengupdate data order
+                  message: sukses mengubah status berbayar menjadi payed
                   data:
                     transaction_id: 1
                     payment_method_id: 1
                     phone: '081234445569'
-                    status: 1970:01:01T00:00:00Z
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -1177,7 +1168,7 @@ paths:
                 success: true
                 message: Berhasil hapus data order
                 data: {}
-  /payment-methods:
+  /paymentmethods:
     post:
       summary: Tambah payment method baru
       tags:
@@ -1257,14 +1248,13 @@ paths:
                           type: string
                 example:
                   code: 200
-                  success: true
                   message: Berhasil mendapatkan semua payment methods
                   data:
                   - id: 1
                     name: Gopay
                   - id: 2
                     name: LinkAja
-  /payment-methods/{id}:  
+  /paymentmethods/{id}:  
     put:
       summary: Update data payment method
       tags:
